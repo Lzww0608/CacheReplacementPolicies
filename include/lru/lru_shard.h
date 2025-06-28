@@ -1,6 +1,6 @@
 /*
 @Author: Lzww
-@LastEditTime: 2025-6-20 21:07:30
+@LastEditTime: 2025-6-28 22:36:48
 @Description: LRU缓存分片实现
 @Language: C++17
 */
@@ -8,10 +8,12 @@
 #ifndef LRU_SHARD_H
 #define LRU_SHARD_H
 
-#include "node.h"
+#include "../node.h"
 #include <mutex>
+#include <shared_mutex>
 #include <unordered_map>
 #include <chrono>
+#include <stdexcept>
 
 #define DEFAULT_EXPIRE_TIME 3600000  // 1小时，毫秒
 
@@ -19,12 +21,11 @@
 
 template<typename K, typename V>
 class LRUShard {
-
 private:
     std::unordered_map<K, Node<K, V>*> keyToNode;
     Node<K, V> *head;
     size_t capacity;
-    std::mutex mtx;
+    mutable std::shared_mutex mtx;  // 读写分离锁
     
     // 统计信息
     mutable size_t hits_ = 0;
@@ -81,35 +82,76 @@ LRUShard<K, V>::~LRUShard() {
 // 零拷贝，与C风格API兼容
 template <typename K, typename V>
 bool LRUShard<K, V>::get(const K& key, V& out_value) {
-    std::lock_guard<std::mutex> lock(mtx);
-    auto it = keyToNode.find(key);
-    if (it == keyToNode.end()) {
-        ++misses_;
-        return false;
-    }
-
-    Node<K, V> *node = it->second;
-    // 检查是否过期
-    if (node->expire_time < std::chrono::steady_clock::now()) {
-        remove(node);
-        keyToNode.erase(it);
-        delete node;
-        ++expired_count_;
-        ++misses_;
-        return false;
+    Node<K, V> *node = nullptr;
+    bool found = false;
+    bool expired = false;
+    
+    // 第一阶段：使用共享锁进行查找和过期检查
+    {
+        std::shared_lock<std::shared_mutex> shared_lock(mtx);
+        auto it = keyToNode.find(key);
+        if (it == keyToNode.end()) {
+            ++misses_;
+            return false;
+        }
+        
+        node = it->second;
+        found = true;
+        
+        // 检查是否过期
+        auto now = std::chrono::steady_clock::now();
+        if (node->expire_time < now) {
+            expired = true;
+        } else {
+            // 未过期，获取值（在共享锁下安全）
+            out_value = node->value;
+        }
     }
     
-    // 移动到前面（最近使用）
-    remove(node);
-    pushToFront(node);
-    out_value = node->value;
-    ++hits_;
-    return true;
+    // 第二阶段：如果需要修改（移动节点或删除过期节点），使用独占锁
+    if (found) {
+        std::unique_lock<std::shared_mutex> unique_lock(mtx);
+        
+        // 双重检查：确保节点仍然存在
+        auto it = keyToNode.find(key);
+        if (it == keyToNode.end()) {
+            ++misses_;
+            return false;
+        }
+        
+        node = it->second;
+        
+        // 再次检查过期状态
+        auto now = std::chrono::steady_clock::now();
+        if (node->expire_time < now) {
+            // 节点已过期，删除它
+            remove(node);
+            keyToNode.erase(it);
+            delete node;
+            ++expired_count_;
+            ++misses_;
+            return false;
+        }
+        
+        // 节点有效，移动到前面（LRU更新）
+        remove(node);
+        pushToFront(node);
+        ++hits_;
+        
+        // 如果第一阶段没有获取到值，这里获取
+        if (expired) {
+            out_value = node->value;
+        }
+        
+        return true;
+    }
+    
+    return false;
 }
 
 template <typename K, typename V>
 void LRUShard<K, V>::put(const K& key, const V& value, int expire_time) {
-    std::lock_guard<std::mutex> lock(mtx);
+    std::unique_lock<std::shared_mutex> lock(mtx);  // 写操作使用独占锁
     
     // 检查是否已存在
     auto it = keyToNode.find(key);
@@ -133,7 +175,7 @@ void LRUShard<K, V>::put(const K& key, const V& value, int expire_time) {
     }
 
     // 创建新节点
-    Node<K, V> *newNode = new Node<K, V>(key, value, std::chrono::steady_clock::now() + std::chrono::milliseconds(expire_time));
+    Node<K, V> *newNode = new Node<K, V>(key, value, expire_time);
     pushToFront(newNode);
     keyToNode[key] = newNode;
 }
@@ -161,7 +203,7 @@ void LRUShard<K, V>::pushToFront(Node<K, V> *node) {
 // 公有remove方法
 template <typename K, typename V>
 bool LRUShard<K, V>::remove(const K& key) {
-    std::lock_guard<std::mutex> lock(mtx);
+    std::unique_lock<std::shared_mutex> lock(mtx);  // 写操作使用独占锁
     auto it = keyToNode.find(key);
     if (it == keyToNode.end()) {
         return false;
@@ -177,7 +219,7 @@ bool LRUShard<K, V>::remove(const K& key) {
 // TTL清理方法
 template <typename K, typename V>
 void LRUShard<K, V>::cleanupExpired() {
-    std::lock_guard<std::mutex> lock(mtx);
+    std::unique_lock<std::shared_mutex> lock(mtx);  // 写操作使用独占锁
     auto now = std::chrono::steady_clock::now();
     
     // 从尾部开始扫描（最不常用的）
@@ -186,21 +228,20 @@ void LRUShard<K, V>::cleanupExpired() {
         Node<K, V>* prev_node = current->prev;
         
         if (current->expire_time < now) {
-            // 节点已过期，删除它
             keyToNode.erase(current->key);
-            remove(current);
+            remove(current);  
             delete current;
             ++expired_count_;
         }
         
-        current = prev_node;
+                 current = prev_node; 
     }
 }
 
 // 统计信息方法
 template <typename K, typename V>
 typename LRUShard<K, V>::ShardStats LRUShard<K, V>::getStats() const {
-    std::lock_guard<std::mutex> lock(const_cast<std::mutex&>(mtx));
+    std::shared_lock<std::shared_mutex> lock(mtx);  // 只读操作使用共享锁
     ShardStats stats;
     stats.hits = hits_;
     stats.misses = misses_;

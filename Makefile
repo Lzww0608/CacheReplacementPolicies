@@ -13,9 +13,17 @@ $(BUILDDIR):
 test_lru_ttl: $(BUILDDIR) $(TESTDIR)/lru_ttl_test.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTDIR)/lru_ttl_test.cpp -o $(BUILDDIR)/test_lru_ttl
 
-# 运行测试
+# 编译性能测试
+test_lru_benchmark: $(BUILDDIR) $(TESTDIR)/lru_benchmark_test.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTDIR)/lru_benchmark_test.cpp -o $(BUILDDIR)/test_lru_benchmark
+
+# 运行功能测试
 test: test_lru_ttl
 	./$(BUILDDIR)/test_lru_ttl
+
+# 运行性能测试
+benchmark: test_lru_benchmark
+	./$(BUILDDIR)/test_lru_benchmark
 
 # 清理
 clean:
