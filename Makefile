@@ -17,6 +17,10 @@ test_lru_ttl: $(BUILDDIR) $(TESTDIR)/lru_ttl_test.cpp
 test_lru_benchmark: $(BUILDDIR) $(TESTDIR)/lru_benchmark_test.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTDIR)/lru_benchmark_test.cpp -o $(BUILDDIR)/test_lru_benchmark
 
+# 编译时间轮测试
+test_time_wheel: $(BUILDDIR) $(TESTDIR)/time_wheel_test.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTDIR)/time_wheel_test.cpp -o $(BUILDDIR)/test_time_wheel
+
 # 运行功能测试
 test: test_lru_ttl
 	./$(BUILDDIR)/test_lru_ttl
