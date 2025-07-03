@@ -1,6 +1,6 @@
 /*
 @Author: Lzww
-@LastEditTime: 2025-6-28 22:36:48
+@LastEditTime: 2025-7-3 21:39:55
 @Description: LRU缓存分片实现
 @Language: C++17
 */
@@ -14,8 +14,9 @@
 #include <unordered_map>
 #include <chrono>
 #include <stdexcept>
+#include <cstdint>
 
-#define DEFAULT_EXPIRE_TIME 3600000  // 1小时，毫秒
+#define DEFAULT_EXPIRE_TIME 60000  // 1分钟，毫秒
 
 
 
@@ -48,10 +49,10 @@ public:
     
     // 统计信息
     struct ShardStats {
-        size_t hits = 0;
-        size_t misses = 0;
-        size_t evictions = 0;
-        size_t expired_count = 0;
+        uint64_t hits = 0;
+        uint64_t misses = 0;
+        uint64_t evictions = 0;
+        uint64_t expired_count = 0;
     };
     ShardStats getStats() const;
 };

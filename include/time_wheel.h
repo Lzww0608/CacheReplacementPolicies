@@ -96,7 +96,6 @@ private:
     MutexType mutex_;
     std::condition_variable cv_;
 
-    // 新增 overflow_timers_
     std::list<std::unique_ptr<TimerNode>> overflow_timers_;
 
     void cascade(int level, long long ticks);
@@ -228,7 +227,6 @@ bool TimeWheel<MutexType>::cancel_timer(uint64_t timer_id) {
     return true;
 }
 
-// 内部添加逻辑 - 最终正确重写
 template<typename MutexType>
 void TimeWheel<MutexType>::add_timer_internal(std::unique_ptr<TimerNode> timer) {
     long long ticks_to_expire = (timer->expiration_tick - current_tick_);
@@ -249,12 +247,13 @@ void TimeWheel<MutexType>::add_timer_internal(std::unique_ptr<TimerNode> timer) 
             return;
         }
     }
-    // ... (处理超出范围)
+    // 超出范围，添加到 overflow_timers_
+    overflow_timers_.push_back(std::move(timer));
 }
 
 template<typename MutexType>
 void TimeWheel<MutexType>::cascade(int level, long long ticks) {
-    if (level >= wheel_sizes_.size()) return;
+    if (static_cast<size_t>(level) >= wheel_sizes_.size()) return;
 
     int current_slot = ticks % wheel_sizes_[level];
     
