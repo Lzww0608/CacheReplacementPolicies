@@ -85,7 +85,6 @@ template <typename K, typename V>
 bool LRUShard<K, V>::get(const K& key, V& out_value) {
     Node<K, V> *node = nullptr;
     bool found = false;
-    bool expired = false;
     
     // 第一阶段：使用共享锁进行查找和过期检查
     {
@@ -102,7 +101,8 @@ bool LRUShard<K, V>::get(const K& key, V& out_value) {
         // 检查是否过期
         auto now = std::chrono::steady_clock::now();
         if (node->expire_time < now) {
-            expired = true;
+            // 节点已过期，需要在独占锁下删除，但不返回值
+            // 这里不设置out_value，让第二阶段处理删除
         } else {
             // 未过期，获取值（在共享锁下安全）
             out_value = node->value;
@@ -131,18 +131,13 @@ bool LRUShard<K, V>::get(const K& key, V& out_value) {
             delete node;
             ++expired_count_;
             ++misses_;
-            return false;
+            return false;  // 过期节点不返回值
         }
         
         // 节点有效，移动到前面（LRU更新）
         remove(node);
         pushToFront(node);
         ++hits_;
-        
-        // 如果第一阶段没有获取到值，这里获取
-        if (expired) {
-            out_value = node->value;
-        }
         
         return true;
     }
@@ -235,7 +230,7 @@ void LRUShard<K, V>::cleanupExpired() {
             ++expired_count_;
         }
         
-                 current = prev_node; 
+        current = prev_node; 
     }
 }
 
