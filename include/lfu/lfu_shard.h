@@ -24,11 +24,12 @@ private:
     std::unordered_map<uint64_t, Node<K, V>*> freqToList;
     size_t capacity;
     mutable std::shared_mutex mtx;  // 读写分离锁
-
     std::atomic<uint64_t> hits_;
     std::atomic<uint64_t> misses_;
     std::atomic<uint64_t> evictions_;
     std::atomic<uint64_t> expired_count_;
+
+    bool remove(Node<K, V> *node);
 
 public:
     LFUShard(size_t capacity);
@@ -97,6 +98,11 @@ bool LFUShard<K, V>::get(const K& key, V& out_value) {
         hits_++;
         out_value = node->value;
         remove(node);
+        auto dummy = freqToList[min_freq];
+        if (dummy->next == dummy) {
+            reqToList.erase(min_freq);
+            delete dummmy;
+        }
         node->frequency++;
         pushToFront(node, node->frequency);
         return true;
@@ -113,6 +119,19 @@ void LFUShard<K, V>::remove(Node<K, V> *node) {
 
     node->prev->next = node->next;
     node->next->prev = node->prev;
+}
+
+template <typename K, typename V>
+bool LFUShard<K, V>::remove(const K& key) {
+    std::unique_lock<std::shared_lock> lock(mtx);
+    auto node = keyToNode[key];
+    remove(node);
+    auto dummy = freToList[node->frequency];
+    if (dummy->next == dummy) {
+        freqToList.erase(node->frequency);
+        delete dummy;
+    }
+    keyToNode.erase(key);
 }
 
 template <typename K, typename V>
