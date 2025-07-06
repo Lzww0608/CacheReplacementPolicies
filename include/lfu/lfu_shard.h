@@ -10,9 +10,12 @@
 
 #include "../node.h"
 #include <mutex>
+#include <shared_mutex>
 #include <unordered_map>
 #include <chrono>
 #include <stdexcept>
+#include <atomic>
+#include <vector>
 
 #define DEFAULT_EXPIRE_TIME 60000  // 1小时，毫秒
 
@@ -28,8 +31,11 @@ private:
     std::atomic<uint64_t> misses_;
     std::atomic<uint64_t> evictions_;
     std::atomic<uint64_t> expired_count_;
+    uint64_t min_freq = 0;  // 当前最小频率
 
-    bool remove(Node<K, V> *node);
+    void remove(Node<K, V> *node);
+    void evictLFU();
+    void updateMinFreq();
 
 public:
     LFUShard(size_t capacity);
@@ -70,45 +76,121 @@ LFUShard<K, V>::~LFUShard() {
 }
 
 template <typename K, typename V>
-bool LFUShard<K, V>::get(const K& key, V& out_value) {
-    bool found = false;
-    
-    {
-        std::shared_lock<std::shared_mutex> lock(mtx);
-        auto it = keyToNode.find(key);
-        if (it == keyToNode.end()) {
-            return false;
-        }
-
-        Node<K, V> *node = it->second;
-        auto now = std::chrono::steady_clock::now();
-        if (node->expire_time > 0 && node->expire_time < now)  {
-            expired_count_++;
-            misses_++;
-            remove(key);
-            return false;
-        }
-
-        found = true;
+void LFUShard<K, V>::evictLFU() {
+    auto it = freqToList.find(min_freq);
+    if (it == freqToList.end()) {
+        return;
     }
 
-    if (found) {
-        std::unique_lock<std::shared_mutex> lock(mtx);
-        Node<K, V>* node = keyToNode[key];
-        hits_++;
-        out_value = node->value;
-        remove(node);
-        auto dummy = freqToList[min_freq];
-        if (dummy->next == dummy) {
-            reqToList.erase(min_freq);
-            delete dummmy;
+    auto dummy = it->second;
+    if (dummy->next == dummy) return;
+
+    auto victim = dummy->prev;
+    remove(victim);
+    keyToNode.erase(victim->key);
+    delete victim;
+    evictions_++;
+
+    if (dummy->next == dummy) {
+        freqToList.erase(min_freq);
+        delete dummy;
+        updateMinFreq();
+    }
+
+    return;
+}
+
+template <typename K, typename V>
+void LFUShard<K, V>::updateMinFreq() {
+    if (freqToList.empty()) {
+        min_freq = 0;
+        return;
+    }
+
+    min_freq = freqToList.begin()->first;
+    for (const auto& pair : freqToList) {
+        if (pair.first < min_freq) {
+            min_freq = pair.first;
         }
+    }
+    return;
+}
+
+template <typename K, typename V>
+bool LFUShard<K, V>::get(const K& key, V& out_value) {
+    std::unique_lock<std::shared_mutex> lock(mtx);
+    auto it = keyToNode.find(key);
+    if (it == keyToNode.end()) {
+        misses_++;
+        return false;
+    }
+
+    Node<K, V> *node = it->second;
+    auto now = std::chrono::steady_clock::now();
+    
+    // 检查过期
+    if (node->expire_time > 0 && node->expire_time < now) {
+        expired_count_++;
+        misses_++;
+        // 安全删除过期节点
+        remove(node);
+        keyToNode.erase(it);
+        delete node;
+        return false;
+    }
+
+    // 更新访问频率
+    hits_++;
+    out_value = node->value;
+    
+    // 从当前频率链表中移除
+    remove(node);
+    
+    // 更新min_freq
+    auto dummy = freqToList[node->frequency];
+    if (dummy->next == dummy) {
+        if (node->frequency == min_freq) {
+            updateMinFreq();
+        }
+        freqToList.erase(node->frequency);
+        delete dummy;
+    }
+    
+    // 增加频率并重新插入
+    node->frequency++;
+    pushToFront(node, node->frequency);
+    
+    return true;
+}
+
+template <typename K, typename V>
+void LFUShard<K, V>::put(const K& key, const V& value, int expired_time) {
+    std::unique_lock<std::shared_mutex> lock(mtx);
+
+    auto it = keyToNode.find(key);
+    if (it != keyToNode.end()) {
+        auto node = it->second;
+        node->value = value;
+        auto now = std::chrono::steady_clock::now();
+        node->expire_time = now + std::chrono::milliseconds(expired_time);
+
+        remove(node);
         node->frequency++;
         pushToFront(node, node->frequency);
-        return true;
+        return;
+    } 
+
+    // 检查容量限制
+    if (keyToNode.size() >= capacity) {
+        evictLFU();
     }
 
-    return false;
+    auto node = new Node<K, V>(key, value, expired_time);
+    node->frequency = 1;
+    keyToNode[key] = node;
+    pushToFront(node, 1);
+    min_freq = 1;
+    return;
 }
 
 template <typename K, typename V>
@@ -123,15 +205,26 @@ void LFUShard<K, V>::remove(Node<K, V> *node) {
 
 template <typename K, typename V>
 bool LFUShard<K, V>::remove(const K& key) {
-    std::unique_lock<std::shared_lock> lock(mtx);
-    auto node = keyToNode[key];
+    std::unique_lock<std::shared_mutex> lock(mtx);
+    auto iter = keyToNode.find(key);
+    if (iter == keyToNode.end()) {
+        return false;
+    }
+    auto node = iter->second;
     remove(node);
-    auto dummy = freToList[node->frequency];
+
+    auto dummy = freqToList[node->frequency];
     if (dummy->next == dummy) {
         freqToList.erase(node->frequency);
         delete dummy;
+        if (node->frequency == min_freq) {
+            updateMinFreq();
+        }
     }
-    keyToNode.erase(key);
+
+    keyToNode.erase(iter);
+    delete node;
+    return true;
 }
 
 template <typename K, typename V>
@@ -170,5 +263,41 @@ typename LFUShard<K, V>::ShardStats LFUShard<K, V>::getStats() const {
     stats.misses = misses_;
     stats.evictions = evictions_;
     stats.expired_count = expired_count_;
+    return stats;
 }
+
+template <typename K, typename V>
+void LFUShard<K, V>::cleanupExpired() {
+    std::unique_lock<std::shared_mutex> lock(mtx);
+    auto now = std::chrono::steady_clock::now();
+
+    std::vector<K> expired_keys;
+    for (auto& pair : keyToNode) {
+        if (pair.second->expire_time > 0 && pair.second->expire_time <= now) {
+            expired_keys.push_back(pair.first);
+        }
+    }
+
+    for (const auto& key : expired_keys) {
+        auto it = keyToNode.find(key);
+        if (it != keyToNode.end()) {
+            auto node = it->second;
+            remove(node);
+            
+            auto dummy = freqToList[node->frequency];
+            if (dummy->next == dummy) {
+                freqToList.erase(node->frequency);
+                delete dummy;
+                if (node->frequency == min_freq) {
+                    updateMinFreq();
+                }
+            }
+
+            keyToNode.erase(it);
+            delete node;
+            expired_count_++;
+        }
+    }
+}
+
 #endif

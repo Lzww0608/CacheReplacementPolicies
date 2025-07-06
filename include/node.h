@@ -24,7 +24,11 @@ struct Node {
     
     Node(const K& k, const V& v, int expire_ms = 3600000) 
         : key(k), value(v), prev(nullptr), next(nullptr) {
-        expire_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(expire_ms);
+        if (expire_ms > 0) {
+            expire_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(expire_ms);
+        } else {
+            expire_time = std::chrono::steady_clock::time_point::max();
+        }
     }
 };
 
