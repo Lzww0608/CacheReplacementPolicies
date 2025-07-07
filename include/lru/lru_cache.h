@@ -17,8 +17,8 @@
 #include <condition_variable>
 
 #define DEFAULT_CAPACITY 1024
-#define DEFAULT_EXPIRE_TIME 3600000  // 1小时，毫秒
-#define TTL_CLEANUP_INTERVAL_MS 100  // TTL清理间隔
+#define DEFAULT_EXPIRE_TIME 60000  // 1分钟，毫秒
+#define TTL_CLEANUP_INTERVAL_MS 1000  // TTL清理间隔
 
 
 template <typename K, typename V, typename Hash>
