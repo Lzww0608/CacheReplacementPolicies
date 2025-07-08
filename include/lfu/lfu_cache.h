@@ -96,8 +96,10 @@ LFUCache<K, V, Hash>::LFUCache(): LFUCache(DEFAULT_CAPACITY) {}
 
 template <typename K, typename V, typename Hash>
 LFUCache<K, V, Hash>::LFUCache(int capacity): enable_ttl_(true) {
-    // CPU cores * 2, balance concurrency and memory overhead
-    shard_count_ = nextPowerOf2(std::thread::hardware_concurrency() * 2);
+    // 对于小容量，限制分片数量以避免过度分片
+    size_t suggested_shards = nextPowerOf2(std::thread::hardware_concurrency() * 2);
+    shard_count_ = std::min(suggested_shards, static_cast<size_t>(std::max(1, capacity)));
+    
     shards_.reserve(shard_count_);
     for (size_t i = 0; i < shard_count_; i++) {
         shards_.emplace_back(std::make_unique<LFUShard<K, V>> (std::max(1UL, static_cast<size_t>(capacity) / shard_count_)));

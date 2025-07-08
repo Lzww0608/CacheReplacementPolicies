@@ -8,7 +8,6 @@ A comprehensive C++ implementation of various cache replacement policies. This p
 - **LRU (Least Recently Used)**: Evicts the least recently accessed item
 - **LFU (Least Frequently Used)**: Evicts the least frequently accessed item
 - **FIFO (First In First Out)**: Evicts items in the order they were added
-- **Random**: Randomly selects items for eviction
 - **Clock**: Circular buffer-based replacement policy
 - **ARC (Adaptive Replacement Cache)**: Self-tuning cache replacement policy
 

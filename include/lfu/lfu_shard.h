@@ -58,7 +58,7 @@ public:
 };
 
 template <typename K, typename V>
-LFUShard<K, V>::LFUShard(size_t capacity): capacity(capacity) {
+LFUShard<K, V>::LFUShard(size_t capacity): capacity(capacity), hits_(0), misses_(0), evictions_(0), expired_count_(0) {
     keyToNode.reserve(capacity);
 }
 
@@ -77,13 +77,16 @@ LFUShard<K, V>::~LFUShard() {
 
 template <typename K, typename V>
 void LFUShard<K, V>::evictLFU() {
+    
     auto it = freqToList.find(min_freq);
     if (it == freqToList.end()) {
         return;
     }
 
     auto dummy = it->second;
-    if (dummy->next == dummy) return;
+    if (dummy->next == dummy) {
+        return;
+    }
 
     auto victim = dummy->prev;
     remove(victim);
@@ -129,36 +132,50 @@ bool LFUShard<K, V>::get(const K& key, V& out_value) {
     auto now = std::chrono::steady_clock::now();
     
     // 检查过期
-    if (node->expire_time > 0 && node->expire_time < now) {
+    if (node->expire_time != std::chrono::steady_clock::time_point::max() && node->expire_time < now) {
         expired_count_++;
         misses_++;
         // 安全删除过期节点
         remove(node);
+        
+        // 检查是否需要更新min_freq
+        auto dummy = freqToList[node->frequency];
+        if (dummy->next == dummy) {
+            freqToList.erase(node->frequency);
+            delete dummy;
+            if (node->frequency == min_freq) {
+                updateMinFreq();
+            }
+        }
+        
         keyToNode.erase(it);
         delete node;
         return false;
     }
 
-    // 更新访问频率
     hits_++;
     out_value = node->value;
     
-    // 从当前频率链表中移除
+    uint64_t old_frequency = node->frequency;
+    bool need_update_min_freq = false;
+    
     remove(node);
     
-    // 更新min_freq
-    auto dummy = freqToList[node->frequency];
+    auto dummy = freqToList[old_frequency];
     if (dummy->next == dummy) {
-        if (node->frequency == min_freq) {
-            updateMinFreq();
-        }
-        freqToList.erase(node->frequency);
+        freqToList.erase(old_frequency);
         delete dummy;
+        if (old_frequency == min_freq) {
+            need_update_min_freq = true;
+        }
     }
-    
-    // 增加频率并重新插入
+
     node->frequency++;
     pushToFront(node, node->frequency);
+    
+    if (need_update_min_freq) {
+        updateMinFreq();
+    }
     
     return true;
 }
@@ -173,13 +190,11 @@ void LFUShard<K, V>::put(const K& key, const V& value, int expired_time) {
         node->value = value;
         auto now = std::chrono::steady_clock::now();
         node->expire_time = now + std::chrono::milliseconds(expired_time);
-
-        remove(node);
-        node->frequency++;
-        pushToFront(node, node->frequency);
+        
         return;
     } 
 
+    
     // 检查容量限制
     if (keyToNode.size() >= capacity) {
         evictLFU();
@@ -190,6 +205,7 @@ void LFUShard<K, V>::put(const K& key, const V& value, int expired_time) {
     keyToNode[key] = node;
     pushToFront(node, 1);
     min_freq = 1;
+    
     return;
 }
 
@@ -252,7 +268,6 @@ void LFUShard<K, V>::pushToFront(Node<K, V>* node, uint64_t frequency) {
     node->prev = head;
     head->next->prev = node;
     head->next = node;
-    keyToNode[node->key] = node;
 }
 
 template <typename K, typename V>
@@ -273,7 +288,7 @@ void LFUShard<K, V>::cleanupExpired() {
 
     std::vector<K> expired_keys;
     for (auto& pair : keyToNode) {
-        if (pair.second->expire_time > 0 && pair.second->expire_time <= now) {
+        if (pair.second->expire_time != std::chrono::steady_clock::time_point::max() && pair.second->expire_time <= now) {
             expired_keys.push_back(pair.first);
         }
     }
