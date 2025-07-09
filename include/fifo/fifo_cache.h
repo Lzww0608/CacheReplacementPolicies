@@ -1,3 +1,9 @@
+/*
+@Author: Lzww  
+@LastEditTime: 2025-7-9 10:00:00
+@Description: FIFO缓存
+@Language: C++17
+*/
 
 #ifndef FIFO_CACHE_H
 #define FIFO_CACHE_H

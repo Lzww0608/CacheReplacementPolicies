@@ -20,10 +20,6 @@ FetchContent_Declare(
   URL https://github.com/google/googletest/archive/03597a01ee50f33f9f6c5c0004e6b8088b9c02d0.zip
 )
 
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-
 # 启用测试
 enable_testing()
 
@@ -55,6 +51,11 @@ add_executable(
 add_executable(
   lru_benchmark_test
   test/lru_benchmark_test.cpp
+)
+
+add_executable(
+  clock_cache_test
+  test/clock_cache_test.cpp
 )
 
 # 自定义目标

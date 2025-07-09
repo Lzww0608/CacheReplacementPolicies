@@ -28,6 +28,10 @@ test_lru_benchmark: $(BUILDDIR) $(TESTDIR)/lru_benchmark_test.cpp
 test_time_wheel: $(BUILDDIR) $(TESTDIR)/time_wheel_test.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTDIR)/time_wheel_test.cpp -o $(BUILDDIR)/test_time_wheel
 
+# 编译Clock缓存测试
+test_clock_cache: $(BUILDDIR) $(TESTDIR)/clock_cache_test.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTDIR)/clock_cache_test.cpp $(GTEST_LIBS) -o $(BUILDDIR)/test_clock_cache
+
 # 运行功能测试
 test: test_lru_ttl
 	./$(BUILDDIR)/test_lru_ttl
@@ -42,6 +46,7 @@ test_all: test_lru_ttl test_lfu_cache test_time_wheel
 	./$(BUILDDIR)/test_lru_ttl
 	./$(BUILDDIR)/test_lfu_cache
 	./$(BUILDDIR)/test_time_wheel
+	./$(BUILDDIR)/test_clock_cache
 
 # 运行性能测试
 benchmark: test_lru_benchmark
