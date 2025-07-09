@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <atomic>
 #include <vector>
+#include <utility>
 
 #define DEFAULT_EXPIRE_TIME 60000  // 1小时，毫秒
 
@@ -187,7 +188,7 @@ void LFUShard<K, V>::put(const K& key, const V& value, int expired_time) {
     auto it = keyToNode.find(key);
     if (it != keyToNode.end()) {
         auto node = it->second;
-        node->value = value;
+        node->value = std::move(value);
         auto now = std::chrono::steady_clock::now();
         node->expire_time = now + std::chrono::milliseconds(expired_time);
         

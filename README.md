@@ -9,6 +9,8 @@ A comprehensive C++ implementation of various cache replacement policies. This p
 - **LFU (Least Frequently Used)**: Evicts the least frequently accessed item
 - **FIFO (First In First Out)**: Evicts items in the order they were added
 - **Clock**: Circular buffer-based replacement policy
+- **2Q**: Two-queue algorithm that uses a small FIFO queue (A1in) for new items and a large LRU queue (Am) for frequently accessed items, providing better hit ratios than simple LRU
+- **Two-list LRU**: Partitions cache into two LRU lists - a probationary segment for new items and a protected segment for frequently accessed items, balancing recency and frequency
 - **ARC (Adaptive Replacement Cache)**: Self-tuning cache replacement policy
 
 This project serves as both a practical library for cache implementations and an educational resource for understanding different cache replacement policies.

@@ -18,6 +18,7 @@ struct Node {
     Node* next;
     std::chrono::steady_clock::time_point expire_time;
     uint64_t frequency = 1; // LFU访问频率
+    uint8_t clock_bit = 0; // Clock算法位
 
     // 构造函数
     Node() : prev(nullptr), next(nullptr) {}

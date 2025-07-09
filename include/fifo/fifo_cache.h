@@ -9,6 +9,7 @@
 #include <mutex>
 #include <shared_mutex>
 #include <unordered_map>
+#include <utility>
 
 #define DEFAULT_CAPACITY 1024 * 1024
 
@@ -84,7 +85,7 @@ void FIFOCache<K, V, Hash>::put(const K& key, const V& value) {
 	auto it = keyToNode.find(key);
 	if (it != keyToNode.end()) {
 		auto node = it->second;
-		node->value = value;
+		node->value = std::move(value);
 		return;
 	}
 

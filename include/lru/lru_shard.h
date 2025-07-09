@@ -15,6 +15,7 @@
 #include <chrono>
 #include <stdexcept>
 #include <cstdint>
+#include <utility>
 
 #define DEFAULT_EXPIRE_TIME 60000  // 1分钟，毫秒
 
@@ -154,7 +155,7 @@ void LRUShard<K, V>::put(const K& key, const V& value, int expire_time) {
     if (it != keyToNode.end()) {
         // 更新现有节点
         Node<K, V>* node = it->second;
-        node->value = value;
+        node->value = std::move(value);
         node->expire_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(expire_time);
         remove(node);
         pushToFront(node);
