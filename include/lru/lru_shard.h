@@ -8,7 +8,7 @@
 #ifndef LRU_SHARD_H
 #define LRU_SHARD_H
 
-#include "../node.h"
+#include "../utils/node.h"
 #include <mutex>
 #include <shared_mutex>
 #include <unordered_map>

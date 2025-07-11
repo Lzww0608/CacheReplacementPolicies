@@ -24,7 +24,7 @@
 template <typename K, typename V, typename Hash>
 class TTLManager;
 
-template <typename K, typename V, typename Hash>
+template <typename K, typename V, typename Hash = std::hash<std::string>>
 class LRUCache {
     // 友元类声明
     friend class TTLManager<K, V, Hash>;

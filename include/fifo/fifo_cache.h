@@ -8,7 +8,7 @@
 #ifndef FIFO_CACHE_H
 #define FIFO_CACHE_H
 
-#include "../node.h"
+#include "../utils/node.h"
 #include <functional>
 #include <string>
 #include <cstdint>

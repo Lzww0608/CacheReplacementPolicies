@@ -1,14 +1,14 @@
 /*
 @Author: Lzww  
 @LastEditTime: 2025-7-10 21:25:12
-@Description: 2Q算法
+@Description: 2Q算法分片实现
 @Language: C++17
 */
 
 #ifndef TWO_Q_SHARD_H
 #define TWO_Q_SHARD_H
 
-#include "../node.h"
+#include "../utils/node.h"
 
 #include <unordered_map>
 #include <string>
@@ -17,6 +17,7 @@
 #include <shared_mutex>
 #include <cstdint>
 #include <vector>
+#include <chrono>
 
 constexpr size_t DEFAULT_CAPACITY = 1024 * 1024;
 
@@ -28,7 +29,7 @@ public:
 
     void put(const K& key, const V& value);
     bool get(const K& key, V& value);
-    void remove(const K& key);
+    bool remove(const K& key);
     void clear();
     void cleanupExpired(); // TTL清理方法
 
@@ -126,7 +127,7 @@ void TwoQShard<K, V, Hash>::remove(Node<K, V>* node) {
 }
 
 template <typename K, typename V, typename Hash>
-void TwoQShard<K, V, Hash>::remove(const K& key) {
+bool TwoQShard<K, V, Hash>::remove(const K& key) {
     std::scoped_lock<std::mutex, std::mutex, std::mutex> lock(fifo_mutex_, lru_mutex_, expired_mutex_);
     
     auto it = lru_cache_.find(key);
@@ -135,7 +136,7 @@ void TwoQShard<K, V, Hash>::remove(const K& key) {
         delete it->second;
         lru_size_--;
         lru_cache_.erase(key);
-        return;
+        return true;
     }
     
     it = fifo_cache_.find(key);
@@ -144,7 +145,7 @@ void TwoQShard<K, V, Hash>::remove(const K& key) {
         delete it->second;
         fifo_size_--;
         fifo_cache_.erase(key);
-        return;
+        return true;
     }
     
     it = expired_cache_.find(key);
@@ -153,8 +154,9 @@ void TwoQShard<K, V, Hash>::remove(const K& key) {
         delete it->second;
         expired_size_--;
         expired_cache_.erase(key);
-        return;
+        return true;
     }
+    return false; // Key not found
 }
 
 template <typename K, typename V, typename Hash>
@@ -170,6 +172,7 @@ void TwoQShard<K, V, Hash>::put(const K& key, const V& value) {
         node->prev->next = node;
         node->next->prev = node;
         node->value = std::move(value);
+        node->expire_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(3600000); // 默认3600000ms (1小时)
         return;
     }
 
@@ -182,6 +185,7 @@ void TwoQShard<K, V, Hash>::put(const K& key, const V& value) {
         node->prev->next = node;
         node->next->prev = node;
         node->value = std::move(value);
+        node->expire_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(3600000); // 默认3600000ms (1小时)
         fifo_size_--;
         fifo_cache_.erase(node->key);
         lru_size_++;
@@ -202,6 +206,7 @@ void TwoQShard<K, V, Hash>::put(const K& key, const V& value) {
         node->prev->next = node;
         node->next->prev = node;
         node->value = std::move(value);
+        node->expire_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(3600000); // 默认3600000ms (1小时)
         expired_size_--;
         expired_cache_.erase(node->key);
         lru_size_++;
@@ -218,6 +223,7 @@ void TwoQShard<K, V, Hash>::put(const K& key, const V& value) {
     node->next = fifo_head_->next;
     node->prev->next = node;
     node->next->prev = node;
+    node->expire_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(3600000); // 默认3600000ms (1小时)
     fifo_size_++;
     fifo_cache_.emplace(key, node);
 
