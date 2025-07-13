@@ -1,5 +1,5 @@
 # CacheReplacementPolicies
-
+ 
 A comprehensive C++ implementation of various cache replacement policies. This project provides efficient and well-tested implementations of common cache replacement algorithms used in computer systems, including LRU (Least Recently Used), LFU (Least Frequently Used), FIFO (First In First Out), and other popular caching strategies.
 
 
