@@ -37,6 +37,8 @@ public:
 	~FIFOCache();
 	bool get(const K& key, V& out_value) const;
 	void put(const K& key, const V& value);
+
+	void resize(size_t new_capacity);
 };
 
 template <typename K, typename V, typename Hash>
@@ -111,6 +113,19 @@ void FIFOCache<K, V, Hash>::put(const K& key, const V& value) {
 	
 	keyToNode[key] = node;
 	size++;
+}
+
+template <typename K, typename V, typename Hash>
+void FIFOCache<K, V, Hash>::resize(size_t new_capacity) {
+	std::unique_lock<std::shared_mutex> lock(mtx);
+	capacity = new_capacity;
+	while (size > capacity) {
+		auto last = dummy->prev;
+		remove(last);
+		keyToNode.erase(last->key);
+		delete last;
+		size--;
+	}
 }
 
 #endif

@@ -21,10 +21,10 @@
 
 
 
-template<typename K, typename V>
+template<typename K, typename V, typename Hash = std::hash<std::string>>
 class LRUShard {
 private:
-    std::unordered_map<K, Node<K, V>*> keyToNode;
+    std::unordered_map<K, Node<K, V>*, Hash> keyToNode;
     Node<K, V> *head;
     size_t capacity;
     mutable std::shared_mutex mtx;  // 读写分离锁
@@ -36,14 +36,20 @@ private:
     mutable size_t expired_count_ = 0;
     
     void remove(Node<K, V> *node);
-
 public:
     LRUShard(size_t capacity);
     ~LRUShard();
+
+    size_t size() const;
+    bool contains(const K& key) const;
+    bool full() const;
+    void resize(size_t new_capacity);
     
     bool get(const K& key, V& out_value);
     void put(const K& key, const V& value, int expire_time = DEFAULT_EXPIRE_TIME);
     bool remove(const K& key);
+
+    Node<K, V>* evict();
     
     void pushToFront(Node<K, V> *node);
     void cleanupExpired();  // TTL清理方法
@@ -59,15 +65,15 @@ public:
 };
 
 
-template <typename K, typename V>
-LRUShard<K, V>::LRUShard(size_t capacity): capacity(capacity) {
+template <typename K, typename V, typename Hash>   
+LRUShard<K, V, Hash>::LRUShard(size_t capacity): capacity(capacity) {
     head = new Node<K, V>();  // 使用默认构造函数
     head->next = head;
     head->prev = head;
 }
 
-template <typename K, typename V>
-LRUShard<K, V>::~LRUShard() {
+template <typename K, typename V, typename Hash>
+LRUShard<K, V, Hash>::~LRUShard() {
     // 清理所有节点
     while (head->next != head) {
         Node<K, V>* node = head->next;
@@ -82,8 +88,8 @@ LRUShard<K, V>::~LRUShard() {
 // 2. const V* LRUShard<K, V>::get(const K& key)
 // 3 bool LRUShard<K, V>::get(const K& key, V& out_value) 
 // 零拷贝，与C风格API兼容
-template <typename K, typename V>
-bool LRUShard<K, V>::get(const K& key, V& out_value) {
+template <typename K, typename V, typename Hash>
+bool LRUShard<K, V, Hash>::get(const K& key, V& out_value) {
     Node<K, V> *node = nullptr;
     bool found = false;
     
@@ -146,8 +152,8 @@ bool LRUShard<K, V>::get(const K& key, V& out_value) {
     return false;
 }
 
-template <typename K, typename V>
-void LRUShard<K, V>::put(const K& key, const V& value, int expire_time) {
+template <typename K, typename V, typename Hash>
+void LRUShard<K, V, Hash>::put(const K& key, const V& value, int expire_time) {
     std::unique_lock<std::shared_mutex> lock(mtx);  // 写操作使用独占锁
     
     // 检查是否已存在
@@ -178,15 +184,15 @@ void LRUShard<K, V>::put(const K& key, const V& value, int expire_time) {
 }
 
 // 私有remove方法实现
-template <typename K, typename V>
-void LRUShard<K, V>::remove(Node<K, V> *node) {
+template <typename K, typename V, typename Hash>
+void LRUShard<K, V, Hash>::remove(Node<K, V> *node) {
     if (node == nullptr) return;
     node->prev->next = node->next;
     node->next->prev = node->prev;
 }
 
-template <typename K, typename V>
-void LRUShard<K, V>::pushToFront(Node<K, V> *node) {
+template <typename K, typename V, typename Hash>
+void LRUShard<K, V, Hash>::pushToFront(Node<K, V> *node) {
     if (node == nullptr) {
         throw std::runtime_error("Node is nullptr");
     }
@@ -198,8 +204,8 @@ void LRUShard<K, V>::pushToFront(Node<K, V> *node) {
 }
 
 // 公有remove方法
-template <typename K, typename V>
-bool LRUShard<K, V>::remove(const K& key) {
+template <typename K, typename V, typename Hash>
+bool LRUShard<K, V, Hash>::remove(const K& key) {
     std::unique_lock<std::shared_mutex> lock(mtx);  // 写操作使用独占锁
     auto it = keyToNode.find(key);
     if (it == keyToNode.end()) {
@@ -214,8 +220,8 @@ bool LRUShard<K, V>::remove(const K& key) {
 }
 
 // TTL清理方法
-template <typename K, typename V>
-void LRUShard<K, V>::cleanupExpired() {
+template <typename K, typename V, typename Hash>
+void LRUShard<K, V, Hash>::cleanupExpired() {
     std::unique_lock<std::shared_mutex> lock(mtx);  // 写操作使用独占锁
     auto now = std::chrono::steady_clock::now();
     
@@ -236,8 +242,8 @@ void LRUShard<K, V>::cleanupExpired() {
 }
 
 // 统计信息方法
-template <typename K, typename V>
-typename LRUShard<K, V>::ShardStats LRUShard<K, V>::getStats() const {
+template <typename K, typename V, typename Hash>
+typename LRUShard<K, V, Hash>::ShardStats LRUShard<K, V, Hash>::getStats() const {
     std::shared_lock<std::shared_mutex> lock(mtx);  // 只读操作使用共享锁
     ShardStats stats;
     stats.hits = hits_;
@@ -245,6 +251,49 @@ typename LRUShard<K, V>::ShardStats LRUShard<K, V>::getStats() const {
     stats.evictions = evictions_;
     stats.expired_count = expired_count_;
     return stats;
+}
+
+template <typename K, typename V, typename Hash>
+size_t LRUShard<K, V, Hash>::size() const {
+    std::shared_lock<std::shared_mutex> lock(mtx);
+    return keyToNode.size();
+}
+
+template <typename K, typename V, typename Hash>
+bool LRUShard<K, V, Hash>::contains(const K& key) const {
+    std::shared_lock<std::shared_mutex> lock(mtx);
+    return keyToNode.find(key) != keyToNode.end();
+}
+
+template <typename K, typename V, typename Hash>
+bool LRUShard<K, V, Hash>::full() const {
+    std::shared_lock<std::shared_mutex> lock(mtx);
+    return keyToNode.size() >= capacity;
+}
+
+template <typename K, typename V, typename Hash>
+Node<K, V>* LRUShard<K, V, Hash>::evict() {
+    std::unique_lock<std::shared_mutex> lock(mtx);
+    if (head->next == head) {
+        return nullptr;
+    }
+    Node<K, V>* node = head->next;
+    remove(node);
+    keyToNode.erase(node->key);
+    ++evictions_;
+    return node;
+}
+
+template <typename K, typename V, typename Hash>
+void LRUShard<K, V, Hash>::resize(size_t new_capacity) {
+    std::unique_lock<std::shared_mutex> lock(mtx);
+    capacity = new_capacity;
+    while (keyToNode.size() > capacity) {
+        Node<K, V>* node = head->prev;
+        remove(node);
+        keyToNode.erase(node->key);
+        delete node;
+    }
 }
 
 
