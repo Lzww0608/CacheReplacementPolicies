@@ -39,6 +39,11 @@ public:
 	void put(const K& key, const V& value);
 
 	void resize(size_t new_capacity);
+	
+	// 辅助方法
+	bool contains(const K& key) const;
+	size_t getSize() const;
+	bool remove(const K& key);  // 删除指定键
 };
 
 template <typename K, typename V, typename Hash>
@@ -98,7 +103,7 @@ void FIFOCache<K, V, Hash>::put(const K& key, const V& value) {
 	}
 
 	auto node = new Node<K, V>(key, value);
-	if (size == capacity) {
+	while (size >= capacity) {
 		auto last = dummy->prev;
 		remove(last);
 		keyToNode.erase(last->key);
@@ -126,6 +131,37 @@ void FIFOCache<K, V, Hash>::resize(size_t new_capacity) {
 		delete last;
 		size--;
 	}
+}
+
+// 辅助方法实现
+template <typename K, typename V, typename Hash>
+bool FIFOCache<K, V, Hash>::contains(const K& key) const {
+	std::shared_lock<std::shared_mutex> lock(mtx);
+	return keyToNode.find(key) != keyToNode.end();
+}
+
+template <typename K, typename V, typename Hash>
+size_t FIFOCache<K, V, Hash>::getSize() const {
+	std::shared_lock<std::shared_mutex> lock(mtx);
+	return size;
+}
+
+template <typename K, typename V, typename Hash>
+bool FIFOCache<K, V, Hash>::remove(const K& key) {
+	std::unique_lock<std::shared_mutex> lock(mtx);
+	
+	auto it = keyToNode.find(key);
+	if (it == keyToNode.end()) {
+		return false;
+	}
+	
+	Node<K, V>* node = it->second;
+	remove(node);
+	keyToNode.erase(it);
+	delete node;
+	size--;
+	
+	return true;
 }
 
 #endif

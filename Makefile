@@ -32,6 +32,14 @@ test_time_wheel: $(BUILDDIR) $(TESTDIR)/time_wheel_test.cpp
 test_clock_cache: $(BUILDDIR) $(TESTDIR)/clock_cache_test.cpp
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTDIR)/clock_cache_test.cpp $(GTEST_LIBS) -o $(BUILDDIR)/test_clock_cache
 
+# 编译ARC缓存测试
+test_arc_cache: $(BUILDDIR) $(TESTDIR)/arc_cache_test.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTDIR)/arc_cache_test.cpp -o $(BUILDDIR)/test_arc_cache
+
+# 编译ARC缓存FIFO测试
+test_arc_fifo: $(BUILDDIR) $(TESTDIR)/arc_fifo_test.cpp
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(TESTDIR)/arc_fifo_test.cpp -o $(BUILDDIR)/test_arc_fifo
+
 # 运行功能测试
 test: test_lru_ttl
 	./$(BUILDDIR)/test_lru_ttl
@@ -41,12 +49,13 @@ test_lfu: test_lfu_cache
 	./$(BUILDDIR)/test_lfu_cache
 
 # 运行所有测试
-test_all: test_lru_ttl test_lfu_cache test_time_wheel
+test_all: test_lru_ttl test_lfu_cache test_time_wheel test_arc_cache
 	@echo "Running all tests..."
 	./$(BUILDDIR)/test_lru_ttl
 	./$(BUILDDIR)/test_lfu_cache
 	./$(BUILDDIR)/test_time_wheel
 	./$(BUILDDIR)/test_clock_cache
+	./$(BUILDDIR)/test_arc_cache
 
 # 运行性能测试
 benchmark: test_lru_benchmark
