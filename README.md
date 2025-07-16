@@ -11,5 +11,6 @@ A comprehensive C++ implementation of various cache replacement policies. This p
 - **Clock**: Circular buffer-based replacement policy
 - **2Q**: Two-queue algorithm that uses a small FIFO queue (A1in) for new items and a large LRU queue (Am) for frequently accessed items, providing better hit ratios than simple LRU
 - **ARC (Adaptive Replacement Cache)**: Self-tuning cache replacement policy
+- **TinyLFU**: A high-performance cache replacement policy that uses a frequency sketch to track item access patterns with minimal memory overhead, combining the benefits of LFU with efficient space utilization through probabilistic data structures
 
 This project serves as both a practical library for cache implementations and an educational resource for understanding different cache replacement policies.
