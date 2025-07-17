@@ -1,72 +1,102 @@
-cmake_minimum_required(VERSION 3.14)
-project(CRP_Cache_Library)
+# CMakeLists.txt for CRP Bloom Filter
+# High-Performance Bloom Filter for W-TinyLFU Cache
 
-# 设置C++标准
+cmake_minimum_required(VERSION 3.10)
+project(CRP_BloomFilter VERSION 1.0.0 LANGUAGES CXX)
+
+# Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# 编译选项
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pthread")
-set(CMAKE_CXX_FLAGS_DEBUG "-g -DDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+# Set build type
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
 
-# 包含目录
-include_directories(include)
+# Compiler flags
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -DDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG -march=native")
 
-# 查找或下载Google Test
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/03597a01ee50f33f9f6c5c0004e6b8088b9c02d0.zip
+# Find required packages
+find_package(Threads REQUIRED)
+
+# Check for SIMD support
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles("
+    #include <immintrin.h>
+    int main() {
+        __m128i a = _mm_set1_epi32(1);
+        return 0;
+    }
+" HAVE_SSE)
+
+if(HAVE_SSE)
+    add_definitions(-DHAVE_SSE)
+endif()
+
+# Include directories
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+# Source files
+set(BLOOM_FILTER_SOURCES
+    src/utils/bloom_filter.cpp
 )
 
-# 启用测试
-enable_testing()
+# Create bloom filter library
+add_library(bloom_filter STATIC ${BLOOM_FILTER_SOURCES})
+target_include_directories(bloom_filter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(bloom_filter Threads::Threads)
 
-# LFU缓存测试
-add_executable(
-  lfu_cache_test
-  test/lfu_cache_test.cpp
+# Demo executable
+add_executable(bloom_filter_demo 
+    examples/bloom_filter_demo.cpp
+)
+target_link_libraries(bloom_filter_demo bloom_filter)
+
+# Find GoogleTest
+find_package(GTest QUIET)
+if(GTest_FOUND)
+    # Test executable
+    add_executable(bloom_filter_test
+        test/bloom_filter_test.cpp
+    )
+    target_link_libraries(bloom_filter_test 
+        bloom_filter
+        GTest::gtest 
+        GTest::gtest_main
+    )
+    
+    # Enable testing
+    enable_testing()
+    add_test(NAME BloomFilterTests COMMAND bloom_filter_test)
+    
+    message(STATUS "Google Test found - tests will be built")
+else()
+    message(STATUS "Google Test not found - tests will not be built")
+    message(STATUS "To install Google Test on Ubuntu: sudo apt-get install libgtest-dev")
+endif()
+
+# Installation
+install(TARGETS bloom_filter
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
 )
 
-target_link_libraries(
-  lfu_cache_test
-  gtest_main
+install(FILES include/utils/bloom_filter.h
+    DESTINATION include/utils
 )
 
-include(GoogleTest)
-gtest_discover_tests(lfu_cache_test)
-
-# 传统测试（不使用GTest）
-add_executable(
-  lru_ttl_test
-  test/lru_ttl_test.cpp
+install(TARGETS bloom_filter_demo
+    RUNTIME DESTINATION bin
 )
 
-add_executable(
-  time_wheel_test
-  test/time_wheel_test.cpp
-)
-
-add_executable(
-  lru_benchmark_test
-  test/lru_benchmark_test.cpp
-)
-
-add_executable(
-  clock_cache_test
-  test/clock_cache_test.cpp
-)
-
-# 自定义目标
-add_custom_target(run_lfu_tests
-    COMMAND lfu_cache_test
-    DEPENDS lfu_cache_test
-    COMMENT "Running LFU Cache Tests"
-)
-
-add_custom_target(run_all_tests
-    COMMAND lru_ttl_test && lfu_cache_test && time_wheel_test
-    DEPENDS lru_ttl_test lfu_cache_test time_wheel_test
-    COMMENT "Running All Cache Tests"
-) 
+# Print configuration
+message(STATUS "")
+message(STATUS "Configuration Summary:")
+message(STATUS "  Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "  CXX Compiler: ${CMAKE_CXX_COMPILER}")
+message(STATUS "  CXX Standard: C++${CMAKE_CXX_STANDARD}")
+message(STATUS "  SSE Support: ${HAVE_SSE}")
+message(STATUS "  Google Test: ${GTest_FOUND}")
+message(STATUS "") 
