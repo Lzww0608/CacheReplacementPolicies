@@ -34,3 +34,5 @@ w_tinylfu_cache/
     │   └── test_slru_policy.cpp
     └── sketch/
         └── test_frequency_sketch.cpp
+
+## Loading Cache窗口缓存策略
