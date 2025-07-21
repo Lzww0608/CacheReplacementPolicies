@@ -4,7 +4,8 @@
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 
-A comprehensive, high-performance C++ library implementing various cache replacement policies with modern C++17 features. This project provides efficient, thread-safe, and well-tested implementations of common cache replacement algorithms used in computer systems, databases, and distributed systems.
+A comprehensive, high-performance C++ library implementing various cache replacement policies with modern C++17 features.
+This project provides efficient, thread-safe, and well-tested implementations of common cache replacement algorithms used in computer systems, databases, and distributed systems.
 
 ## 📋 Supported Cache Replacement Policies
 

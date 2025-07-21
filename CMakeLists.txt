@@ -60,13 +60,13 @@ if(GTest_FOUND)
     # Test executable
     add_executable(bloom_filter_test
         test/bloom_filter_test.cpp
-    )
+)
     target_link_libraries(bloom_filter_test 
         bloom_filter
         GTest::gtest 
         GTest::gtest_main
-    )
-    
+)
+
     # Enable testing
     enable_testing()
     add_test(NAME BloomFilterTests COMMAND bloom_filter_test)
