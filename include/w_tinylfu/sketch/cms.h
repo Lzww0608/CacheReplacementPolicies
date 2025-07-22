@@ -93,8 +93,8 @@ public:
     // 禁止拷贝，允许移动
     CountMinSketch(const CountMinSketch&) = delete;
     CountMinSketch& operator=(const CountMinSketch&) = delete;
-    CountMinSketch(CountMinSketch&&) = default;
-    CountMinSketch& operator=(CountMinSketch&&) = default;
+    CountMinSketch(CountMinSketch&&) noexcept;
+    CountMinSketch& operator=(CountMinSketch&&) noexcept;
     
     // 核心操作
     void increment(const void* key, size_t key_len);

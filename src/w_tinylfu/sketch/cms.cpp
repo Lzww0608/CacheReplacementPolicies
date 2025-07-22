@@ -117,6 +117,44 @@ std::vector<uint32_t> CMSHash::doubleHash(const void* key, size_t len,
 // CountMinSketch Implementation
 //===================================================================
 
+
+CountMinSketch::CountMinSketch(CountMinSketch&& other) noexcept
+    : config_(std::move(other.config_))
+    , counter_array_(std::move(other.counter_array_))
+    , seeds_(std::move(other.seeds_))
+    , access_count_(other.access_count_.load())
+    , total_increments_(other.total_increments_.load())
+    , total_decays_(other.total_decays_.load()) {
+    
+    // 重置other的原子变量
+    other.access_count_ = 0;
+    other.total_increments_ = 0;
+    other.total_decays_ = 0;
+}
+
+CountMinSketch& CountMinSketch::operator=(CountMinSketch&& other) noexcept {
+    if (this != &other) {
+        // 使用写锁保护当前对象
+        std::unique_lock<std::shared_mutex> write_lock(rw_mutex_);
+        
+        // 移动配置和资源
+        config_ = std::move(other.config_);
+        counter_array_ = std::move(other.counter_array_);
+        seeds_ = std::move(other.seeds_);
+        
+        // 原子变量需要特殊处理
+        access_count_ = other.access_count_.load();
+        total_increments_ = other.total_increments_.load();
+        total_decays_ = other.total_decays_.load();
+        
+        // 重置other的原子变量
+        other.access_count_ = 0;
+        other.total_increments_ = 0;
+        other.total_decays_ = 0;
+    }
+    return *this;
+}
+
 CountMinSketch::CountMinSketch(const CMSConfig& config)
     : config_(config)
     , access_count_(0)
