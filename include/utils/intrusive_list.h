@@ -10,6 +10,15 @@ template <typename K, typename V>
 class IntrusiveList {
 public:
     using Node = ::Node<K, V>;
+
+    IntrusiveList();
+    ~IntrusiveList();
+
+    void clear();
+    void push_back(Node* node);
+    void push_front(Node* node);
+    void remove(Node* node);
+    Node* pop_back();
 private:
     // 头结点  
     Node* head_;
@@ -25,6 +34,58 @@ private:
         node->next = nullptr;
     }
 };
+
+template <typename K, typename V>
+IntrusiveList<K, V>::IntrusiveList() {
+    head_ = new Node();
+    head_->next = head_;
+    head_->prev = head_;
+}
+
+template <typename K, typename V>
+IntrusiveList<K, V>::~IntrusiveList() {
+    clear();
+}
+
+template <typename K, typename V>
+void IntrusiveList<K, V>::clear() {
+    Node* node = head_;
+    while (node) {
+        Node* next = node->next;
+        delete node;
+        node = next;
+    }
+}
+
+template <typename K, typename V>
+void IntrusiveList<K, V>::push_back(Node* node) {
+    unlink(node);
+    node->next = head_;
+    node->prev = head_->prev;
+    node->next->prev = node;
+    node->prev->next = node;
+}
+
+template <typename K, typename V>
+void IntrusiveList<K, V>::push_front(Node* node) {
+    unlink(node);
+    node->next = head_->next;
+    node->prev = head_;
+    node->next->prev = node;
+    node->prev->next = node;
+}
+
+template <typename K, typename V>
+void IntrusiveList<K, V>::remove(Node* node) {
+    unlink(node);
+}
+
+template <typename K, typename V>
+auto IntrusiveList<K, V>::pop_back() -> Node* {
+    Node* node = head_->prev;
+    remove(node);
+    return node;
+}
 
 } // namespace CRP
 
