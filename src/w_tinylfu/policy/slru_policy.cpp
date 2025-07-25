@@ -4,45 +4,39 @@
 namespace CRP {
 namespace w_tinylfu {
 
-template <typename K, typename V, typename Hash = std::hash<std::string>>
-void SLRU<k, v, Hash>::OnAccess(Node* n) {
-  
+// 从probation 升至 protected
+template <typename K, typename V, typename Hash>
+void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAccess(Node* node) {      
+    if (node->is_in_protected) {
+        return;
+    }
+
+    /* protected_ 有空余，直接升至 protected—_ */
+    auto victim = GetVictim();
+    if (victim == nullptr) {
+        probation_.remove(node);
+        protection_.push_front(node);
+        node->is_in_protected = true;
+        return;
+    }
+
+    /* protected_ 不为空，竞争 */
+    if (Compete(node, victim) == 0) {
+        probation_.remove(node);
+        protection_.push_front(node);
+        node->is_in_protected = true;
+    } else { // 竞争失败，从 probation_ 中淘汰
+        probation_.pop_back();
+        probation_.push_front(victim);
+        victim->is_in_protected = false;
+    }
+
+    return;
 }
 
-    /* 从窗口缓存升至 probation */
-    void OnAdd(Node* n);
 
-    /* 移除节点 */
-    uint32_t EraseNode(Node* node);
 
-    /* 获取victime节点 */
-    Node* GetVictim();
 
-    /* 公平竞争：候选数据 与 受害者*/
-    uint32_t Compete(Node* candidate, Node* victim);
-    /* 驱逐节点 */
-    Node* Evict();
-
-    /* 获取probation和protection大小 */
-    uint64_t GetProbationSize() const;
-    uint64_t GetProtectionSize() const;
-    uint64_t GetSize() const;
-    uint64_t GetCapacity() const;
-
-    /* 判断节点是否存在于主缓存 */
-    bool Contains(const K& key) const;
-private:
-    List probation_;
-    List protection_;
-    
-    uint64_t probation_size_;
-    uint64_t protection_size_;
-
-    uint64_t probation_capacity_;
-    uint64_t protection_capacity_;
-
-    std::unordered_map<K, Node*> key_to_node_;
-};
 
 } // namespace w_tinylfu
 } // namespace CRP

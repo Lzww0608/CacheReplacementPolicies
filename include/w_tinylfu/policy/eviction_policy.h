@@ -6,7 +6,7 @@
 
 #include <cstdint>
 #include <unordered_map>
-#include <hash>
+#include <functional>
 #include <string>
 
 namespace CRP {
@@ -16,7 +16,7 @@ template <typename K, typename V, typename Hash = std::hash<std::string>>
 class SLRU {
 public:
     using Node = ::Node<K, V>;
-    using List = ::IntrusiveList<K, V>;
+    using List = CRP::IntrusiveList<K, V>;
 
     virtual ~SLRU() = default;
     /* 从probation 升至 protected */

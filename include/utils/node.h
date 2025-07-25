@@ -30,10 +30,10 @@ struct Node: public IntrusiveListNode<Node<K, V>> {
     bool is_in_protected;  // 标记是否在 protected 区
 
     // 构造函数
-    Node() : prev(nullptr), next(nullptr) {}
+    Node() : IntrusiveListNode<Node<K, V>>(), key(K()), value(V()), is_in_protected(false) {}
     
     Node(const K& k, const V& v, int expire_ms = 3600000) 
-        : key(k), value(v), prev(nullptr), next(nullptr), is_in_protected(false) {
+        : IntrusiveListNode<Node<K, V>>(), key(k), value(v), is_in_protected(false) {
         if (expire_ms > 0) {
             expire_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(expire_ms);
         } else {
