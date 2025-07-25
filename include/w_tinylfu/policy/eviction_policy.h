@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <unordered_map>
 #include <hash>
-#incldue <string>
+#include <string>
 
 namespace CRP {
 namespace w_tinylfu {
