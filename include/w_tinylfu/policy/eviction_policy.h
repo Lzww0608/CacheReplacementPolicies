@@ -17,23 +17,31 @@ public:
 
     virtual ~SLRU() = default;
     /* 从probation 升至 protected */
-    void on_access(Node* n);
+    void onAccess(Node* n);
     /* 从窗口缓存升至 probation */
-    void on_add(Node* n);
+    void onAdd(Node* n);
 
-    Node* get_victim();
+    /* 移除节点 */
+    uint32_t erase(Node* node);
+
+    /* 获取victime节点 */
+    Node* getVictim();
 
     /* 公平竞争：候选数据 与 受害者*/
     uint32_t compete(Node* candidate, Node* victim);
     /* 驱逐节点 */
     Node* evict();
 
+    /* 获取probation和protection大小 */
+    uint64_t getProbationSize() const;
+    uint64_t getProtectionSize() const;
+
 private:
     IntrusiveList<K, V> probation_;
-    IntrusiveList<K, V> protected_;
+    IntrusiveList<K, V> protection_;
     
     uint64_t probation_size_;
-    uint64_t protected_size_;
+    uint64_t protection_size_;
 };
 
 } // namespace w_tinylfu
