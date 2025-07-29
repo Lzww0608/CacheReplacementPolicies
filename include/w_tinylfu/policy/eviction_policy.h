@@ -18,6 +18,7 @@ public:
     using Node = ::Node<K, V>;
     using List = CRP::IntrusiveList<K, V>;
 
+    SLRU(uint64_t probation_capacity, uint64_t protection_capacity);
     virtual ~SLRU() = default;
     /* 从probation 升至 protected */
     void OnAccess(Node* n);
