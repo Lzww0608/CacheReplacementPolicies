@@ -45,10 +45,19 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAdd(Node* node) {
     /* probation_ 有空余，直接升至 probation_ */
     if (probation_.size() < probation_capacity_) {
         probation_.push_front(node);
+        key_to_node_[node->key] = node;
         return;
     }
 
     /* probation_ 已满，竞争 */
+    auto victim = probation.pop_back();
+    if (Compete(node, victim) == 0) {
+        probation_.push_front(node);
+        key_to_node_[node->key] = node;
+        delete victim;
+    }
+
+    return;
 }
 
 
