@@ -17,7 +17,7 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAccess(Node* node) {
     }
 
     /* protected_ 有空余，直接升至 protected—_ */
-    auto victim = GetVictim();
+    auto victim = protected_.pop_back();
     if (victim == nullptr) {
         probation_.remove(node);
         protection_.push_front(node);
@@ -30,10 +30,11 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAccess(Node* node) {
         probation_.remove(node);
         protection_.push_front(node);
         node->is_in_protected = true;
-    } else { // 竞争失败，从 probation_ 中淘汰
-        probation_.pop_back();
+        // victim 降级至 probation_
         probation_.push_front(victim);
         victim->is_in_protected = false;
+    } else { // 竞争失败，victim 回原位置
+        protected_.push_back(victim);
     }
 
     return;
@@ -60,6 +61,22 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAdd(Node* node) {
     return;
 }
 
+/* 移除主缓存的某一个节点 */
+template <typename K, typename V, typename Hash>
+uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::EraseNode(Node* node) {
+    if (!key_to_node_.contains(node->key)) {
+        return -1; // 主缓存中没有该节点
+    }
+    
+    key_to_node_.erase(node->key);
+    if (node->is_in_protected) {
+        protected_.remove(node);
+    } else {
+        protection_.remove(node);
+    }
+
+    return 0;
+}
 
 } // namespace w_tinylfu
 } // namespace CRP
