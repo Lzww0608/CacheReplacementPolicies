@@ -83,6 +83,7 @@ void IntrusiveList<K, V>::remove(Node* node) {
 template <typename K, typename V>
 auto IntrusiveList<K, V>::pop_back() -> Node* {
     Node* node = head_->prev;
+    if (node == head) return nullptr;
     remove(node);
     return node;
 }
