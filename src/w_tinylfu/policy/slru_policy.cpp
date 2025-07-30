@@ -78,5 +78,26 @@ uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::EraseNode(Node* node) {
     return 0;
 }
 
+/* 公平竞争：候选数据 与 受害者*/
+template <typename K, typename V, typename Hash>
+uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::Compete(Node* candidate, Node* victim) {
+    // 主缓存中没有victim
+    if (!key_to_node_.contains(victim->key)) {
+        return -1;
+    }
+
+    // candidate频率 > Victim 频率
+    if (candidate->frequency > victim->frequency) {
+        return 0;
+    }
+    // candidate频率 <= Victim 频率
+    // 仅当候选频率≥5 时，才可能通过随机淘汰机制（概率 50%）获得晋升资格
+    if (candidate->frequency < 5) {
+        return -1;
+    }
+
+    return getRandomProbability(50); // to do in utils
+}
+
 } // namespace w_tinylfu
 } // namespace CRP
