@@ -28,9 +28,6 @@ public:
     /* 移除节点 */
     uint32_t EraseNode(Node* node);
 
-    /* 获取victime节点 */
-    Node* GetVictim();
-
     /* 公平竞争：候选数据 与 受害者*/
     uint32_t Compete(Node* candidate, Node* victim);
     /* 驱逐节点 */
