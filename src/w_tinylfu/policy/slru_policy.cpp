@@ -99,5 +99,32 @@ uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::Compete(Node* candidate, Node* victim
     return getRandomProbability(50); // to do in utils
 }
 
+/* 获取probation和protection大小 */
+template <typename K, typename V, typename Hash>
+uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetProbationSize() const {
+    return probation_.size();
+}
+
+template <typename K, typename V, typename Hash>
+uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetProtectionSize() const {
+    return protected_.size();
+}
+
+template <typename K, typename V, typename Hash>
+uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetSize() const {
+    return probation_.size() + protected_.size();
+}
+
+template <typename K, typename V, typename Hash>
+uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetCapacity() const {
+    return probation_capacity_ + protection_capacity_;
+}
+
+/* 判断节点是否存在于主缓存 */
+template <typename K, typename V, typename Hash>
+bool Contains(const K& key) const {
+    return probation_.contains(key) || protected_.contains(key);
+}
+
 } // namespace w_tinylfu
 } // namespace CRP
