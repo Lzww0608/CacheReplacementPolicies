@@ -44,9 +44,6 @@ public:
 private:
     List probation_;
     List protection_;
-    
-    uint64_t probation_size_;
-    uint64_t protection_size_;
 
     uint64_t probation_capacity_;
     uint64_t protection_capacity_;
