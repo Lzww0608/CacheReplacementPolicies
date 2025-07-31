@@ -8,6 +8,9 @@
 #include <unordered_map>
 #include <functional>
 #include <string>
+#include <memory>
+#include <mutex>
+#include <shared_mutex>
 
 namespace CRP {
 namespace w_tinylfu {
@@ -49,6 +52,9 @@ private:
     uint64_t protection_capacity_;
 
     std::unordered_map<K, Node*> key_to_node_;
+
+    std::shared_mutex probation_mutex_;
+    std::shared_mutex protected_mutex_;
 };
 
 } // namespace w_tinylfu
