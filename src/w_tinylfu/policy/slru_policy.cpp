@@ -1,5 +1,6 @@
 
 #include "../../../include/w_tinylfu/policy/eviction_policy.h"
+#include "../../../include/utils/rand.h"
 
 namespace CRP {
 namespace w_tinylfu {
@@ -11,7 +12,8 @@ CRP::w_tinylfu::SLRU<K, V, Hash>::SLRU(uint64_t probation_capacity, uint64_t pro
 
 // 从probation 升至 protected
 template <typename K, typename V, typename Hash>
-void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAccess(Node* node) {      
+void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAccess(Node* node) {
+    std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protected_mutex_);
     if (node->is_in_protected) {
         return;
     }
@@ -43,6 +45,7 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAccess(Node* node) {
 /* 从窗口缓存升至 probation */
 template <typename K, typename V, typename Hash>
 void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAdd(Node* node) {
+    std::unique_lock<std::shared_lock> protected_write_lock(protected_mutex_);
     /* probation_ 有空余，直接升至 probation_ */
     if (probation_.size() < probation_capacity_) {
         probation_.push_front(node);
@@ -64,6 +67,7 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAdd(Node* node) {
 /* 移除主缓存的某一个节点 */
 template <typename K, typename V, typename Hash>
 uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::EraseNode(Node* node) {
+    std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protected_mutex_);
     if (!key_to_node_.contains(node->key)) {
         return -1; // 主缓存中没有该节点
     }
@@ -81,6 +85,8 @@ uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::EraseNode(Node* node) {
 /* 公平竞争：候选数据 与 受害者*/
 template <typename K, typename V, typename Hash>
 uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::Compete(Node* candidate, Node* victim) {
+    std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protected_mutex_);
+    
     // 主缓存中没有victim
     if (!key_to_node_.contains(victim->key)) {
         return -1;
@@ -96,22 +102,26 @@ uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::Compete(Node* candidate, Node* victim
         return -1;
     }
 
-    return getRandomProbability(50); // to do in utils
+    return getRandomBool();
 }
 
 /* 获取probation和protection大小 */
 template <typename K, typename V, typename Hash>
 uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetProbationSize() const {
+     std::shared_lock<std::shared_mutex> probation_read_lock_(probation_mutex_);
     return probation_.size();
 }
 
 template <typename K, typename V, typename Hash>
 uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetProtectionSize() const {
+    std::shared_lock<std::shared_mutex> protected_read_lock_(protected_mutex_);
     return protected_.size();
 }
 
 template <typename K, typename V, typename Hash>
 uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetSize() const {
+    std::shared_lock<std::shared_mutex> probation_read_lock_(probation_mutex_);
+    std::shared_lock<std::shared_mutex> protected_read_lock_(protected_mutex_);
     return probation_.size() + protected_.size();
 }
 
@@ -123,6 +133,8 @@ uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetCapacity() const {
 /* 判断节点是否存在于主缓存 */
 template <typename K, typename V, typename Hash>
 bool Contains(const K& key) const {
+    std::shared_lock<std::shared_mutex> probation_read_lock_(probation_mutex_);
+    std::shared_lock<std::shared_mutex> protected_read_lock_(protected_mutex_);
     return probation_.contains(key) || protected_.contains(key);
 }
 
