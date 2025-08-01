@@ -57,7 +57,7 @@ private:
     std::unordered_map<K, Node*> key_to_node_;
 
     std::shared_mutex probation_mutex_;
-    std::shared_mutex protected_mutex_;
+    std::shared_mutex protection_mutex_;
 };
 
 } // namespace w_tinylfu
