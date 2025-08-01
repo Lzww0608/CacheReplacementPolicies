@@ -6,7 +6,7 @@
 #include <atomic>
 
 namespace CRP {
-namespace w_tineylfu {
+namespace w_tinylfu {
 
 constexpr double DEFAULT_DECAY_FACTOR = 0.5; 
 constexpr uint32_t DEFAULT_DECAY_INTERVAL = 1000; // 1000 ms
