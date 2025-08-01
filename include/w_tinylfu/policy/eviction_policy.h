@@ -44,6 +44,9 @@ public:
 
     /* 判断节点是否存在于主缓存 */
     bool Contains(const K& key) const;
+
+    /* protected_ decay*/
+    void decay_all_frequencies(double factor);
 private:
     List probation_;
     List protection_;
