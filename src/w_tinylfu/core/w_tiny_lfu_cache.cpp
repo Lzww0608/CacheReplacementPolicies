@@ -35,5 +35,51 @@ void Cache<K, V, Hash>::decay_loop() {
     protected_.decay_all_frequencies(decay_factor_);  // 遍历所有条目，频率 *= 衰减因子
 }
 
+// 查询缓存：返回是否命中，若命中则通过value输出
+template <typename K, typename V, typename Hash = std::hash<std::string>>
+bool Cache<K, V, Hash>::get(const K& key, V& value) {
+    if (loading_cache_.get(key, value)) {
+        return true;
+    }
+
+    if (slru_.contains(key)) {
+        return true;
+    }
+
+    return false;
+}
+
+// 插入缓存：若key已存在则更新value，否则插入新条目
+template <typename K, typename V, typename Hash = std::hash<std::string>>
+void Cache<K, V, Hash>::put(const K& key, const V& value) {
+    if (slru_.contains(key)) {
+        slru_.put(key, value);
+    }
+
+    loading_cache_.put(key, value);
+}
+
+// 删除缓存条目
+template <typename K, typename V, typename Hash = std::hash<std::string>>
+bool Cache<K, V, Hash>::erase(const K& key) {
+    if (slru_.contains(key)) {
+        slru_.erase(key);
+        return true;
+    }
+
+    if (loading_cache_.contains(key)) {
+        loading_cache_.remove(key);
+        return true;
+    }
+
+    return false;
+}
+
+// 获取当前缓存总大小
+template <typename K, typename V, typename Hash = std::hash<std::string>>
+size_t Cache<K, V, Hash>::size() const {
+    return slru_.size() + loading_cache_.size();
+}
+
 }
 }
