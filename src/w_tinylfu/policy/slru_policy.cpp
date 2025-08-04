@@ -12,8 +12,7 @@ CRP::w_tinylfu::SLRU<K, V, Hash>::SLRU(uint64_t probation_capacity, uint64_t pro
 
 // 从probation 升至 protected
 template <typename K, typename V, typename Hash>
-void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAccess(Node* node) {
-    std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protection_mutex_);
+void CRP::w_tinylfu::SLRU<K, V, Hash>::onAccess(Node* node) {
     if (node->is_in_protected) {
         return;
     }
@@ -44,8 +43,7 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAccess(Node* node) {
 
 /* 从窗口缓存升至 probation */
 template <typename K, typename V, typename Hash>
-void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAdd(Node* node) {
-    std::unique_lock<std::shared_lock> protection_write_lock(protection_mutex_);
+void CRP::w_tinylfu::SLRU<K, V, Hash>::onAdd(Node* node) {
     /* probation_ 有空余，直接升至 probation_ */
     if (probation_.size() < probation_capacity_) {
         probation_.push_front(node);
@@ -66,7 +64,7 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::OnAdd(Node* node) {
 
 /* 移除主缓存的某一个节点 */
 template <typename K, typename V, typename Hash>
-uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::EraseNode(Node* node) {
+uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::eraseNode(Node* node) {
     std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protection_mutex_);
     if (!key_to_node_.contains(node->key)) {
         return -1; // 主缓存中没有该节点
@@ -84,9 +82,7 @@ uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::EraseNode(Node* node) {
 
 /* 公平竞争：候选数据 与 受害者*/
 template <typename K, typename V, typename Hash>
-uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::Compete(Node* candidate, Node* victim) {
-    std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protection_mutex_);
-    
+uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::compete(Node* candidate, Node* victim) {
     // 主缓存中没有victim
     if (!key_to_node_.contains(victim->key)) {
         return -1;
@@ -107,32 +103,32 @@ uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::Compete(Node* candidate, Node* victim
 
 /* 获取probation和protection大小 */
 template <typename K, typename V, typename Hash>
-uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetProbationSize() const {
+uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::probationSize() const {
      std::shared_lock<std::shared_mutex> probation_read_lock_(probation_mutex_);
     return probation_.size();
 }
 
 template <typename K, typename V, typename Hash>
-uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetProtectionSize() const {
+uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::protectionSize() const {
     std::shared_lock<std::shared_mutex> protection_read_lock_(protection_mutex_);
     return protection_.size();
 }
 
 template <typename K, typename V, typename Hash>
-uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetSize() const {
+uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::size() const {
     std::shared_lock<std::shared_mutex> probation_read_lock_(probation_mutex_);
     std::shared_lock<std::shared_mutex> protection_read_lock_(protection_mutex_);
     return probation_.size() + protection_.size();
 }
 
 template <typename K, typename V, typename Hash>
-uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::GetCapacity() const {
+uint64_t CRP::w_tinylfu::SLRU<K, V, Hash>::capacity() const {
     return probation_capacity_ + protection_capacity_;
 }
 
 /* 判断节点是否存在于主缓存 */
 template <typename K, typename V, typename Hash>
-bool CRP::w_tinylfu::SLRU<K, V, Hash>::Contains(const K& key) const {
+bool CRP::w_tinylfu::SLRU<K, V, Hash>::contains(const K& key) const {
     std::shared_lock<std::shared_mutex> probation_read_lock_(probation_mutex_);
     std::shared_lock<std::shared_mutex> protection_read_lock_(protection_mutex_);
     return probation_.contains(key) || protection_.contains(key);
@@ -144,6 +140,27 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::decay_all_frequencies(double factor) {
     for (auto it = protection_->head_->next; it != protection_->head_; it = it->next;) {
         it->frequency = static_cast<uint64_t>(it->frequency * factor);
     }
+}
+
+template <typename K, typename V, typename Hash>
+bool CRP::w_tinylfu::SLRU<K, V, Hash>::get(const K& key, V& value) {
+    /* 因为可能涉及到onAdd和onAccess等节点移动操作，使用写锁 */
+    std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protection_mutex_);
+    if (!key_to_node_.contains(key)) {
+        return false;
+    }
+
+    auto node = key_to_node_.find(key);
+    // 在 protection 部分，直接获取并按照LRU算法移到链表开头
+    if (node->is_in_protected) {
+        protection_.
+    }
+}
+
+template <typename K, typename V, typename Hash>
+void CRP::w_tinylfu::SLRU<K, V, Hash>::put(const K& key, const V& value) {
+    std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protection_mutex_);
+    
 }
 
 } // namespace w_tinylfu
