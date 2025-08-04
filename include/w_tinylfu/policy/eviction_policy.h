@@ -3,6 +3,7 @@
 
 #include "../../utils/intrusive_list.h"
 #include "../../utils/node.h"
+#include "../../lru/lru_cache.h"
 
 #include <cstdint>
 #include <unordered_map>
@@ -52,8 +53,8 @@ public:
     /* protected_ decay*/
     void decay_all_frequencies(double factor);
 private:
-    List probation_;
-    List protection_;
+    LRUCache<K, V, Hash> probation_;
+    LRUCache<K, V, Hash> protection_;
 
     uint64_t probation_capacity_;
     uint64_t protection_capacity_;
