@@ -36,5 +36,10 @@ void LoadingCache<K, V, Hash>::enableTTL(bool enable) {
     cache_.enableTTL(enable);
 }
 
+template <typename K, typename V, typename Hash>
+bool LoadingCache<K, V, Hash>::contains(const K& key) {
+    return cache_.contains(key);
+}
+
 }
 }
