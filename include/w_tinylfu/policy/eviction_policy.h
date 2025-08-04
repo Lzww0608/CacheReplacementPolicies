@@ -36,6 +36,10 @@ public:
     /* 驱逐节点 */
     Node* Evict();
 
+    bool get(const K& key, V& value);
+
+    void put(const K& key, const V& value);
+
     /* 获取probation和protection大小 */
     uint64_t GetProbationSize() const;
     uint64_t GetProtectionSize() const;
