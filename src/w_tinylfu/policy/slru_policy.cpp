@@ -153,14 +153,39 @@ bool CRP::w_tinylfu::SLRU<K, V, Hash>::get(const K& key, V& value) {
     auto node = key_to_node_.find(key);
     // 在 protection 部分，直接获取并按照LRU算法移到链表开头
     if (node->is_in_protected) {
-        protection_.
+        protection_.get(key, value);
+        return true;
     }
+
+    if (loading_cache_.contains(key)) {
+        loading_cache_.get(key, value);
+        /* onAdd 操作 */
+        return true;
+    }
+
+    if (probation_.contains(key)) {
+        probation_.get(key, value);
+        /* onAccess 操作 */
+        return true;
+    }
+
+    return false;
 }
 
+/* 插入缓存：若key已存在则更新value，否则插入新条目 
+ * 插入缓存时不会触发onAdd和onAccess等升级操作
+*/
 template <typename K, typename V, typename Hash>
 void CRP::w_tinylfu::SLRU<K, V, Hash>::put(const K& key, const V& value) {
     std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protection_mutex_);
-    
+
+    if (slru_.contains(key)) {
+        slru_.put(key, value);
+        return;
+    }
+
+    loading_cache_.put(key, value);
+    return;
 }
 
 } // namespace w_tinylfu
