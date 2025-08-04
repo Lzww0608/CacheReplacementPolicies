@@ -30,7 +30,10 @@ struct LoadingCache {
     bool remove(const K& key);
     
     void enableTTL(bool enable = true);
-    
+
+    bool contains(const K& key);
+
+    size_t size() const;
 };
 
 
