@@ -41,5 +41,15 @@ bool LoadingCache<K, V, Hash>::contains(const K& key) {
     return cache_.contains(key);
 }
 
+template <typename K, typename V, typename Hash>
+bool LoadingCache<K, V, Hash>::full(const K& key) const {
+    return cache_.full(key);
+}
+
+template <typename K, typename V, typename Hash>
+typename LoadingCache<K, V, Hash>::Node* LoadingCache<K, V, Hash>::get(const K& key) {
+    return cache_.get(key);
+}
+
 }
 }

@@ -34,6 +34,10 @@ struct LoadingCache {
     bool contains(const K& key);
 
     size_t size() const;
+
+    bool full(const K& key) const;
+
+    Node* get(const K& key);
 };
 
 

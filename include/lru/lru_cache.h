@@ -51,6 +51,7 @@ public:
     void put(const K& key, const V& value, int expire_time = DEFAULT_EXPIRE_TIME);
     bool remove(const K& key);
     bool contains(const K& key);
+    bool full(const K& key) const;
     
     // TTL控制
     void enableTTL(bool enable = true);
@@ -167,6 +168,12 @@ template <typename K, typename V, typename Hash>
 bool LRUCache<K, V, Hash>::contains(const K& key) {
     size_t shard_id = getShard(key);
     return shards_[shard_id]->contains(key);
+}
+
+template <typename K, typename V, typename Hash>
+bool LRUCache<K, V, Hash>::full(const K& key) const {
+    size_t shard_id = getShard(key);
+    return shards_[shard_id]->full();
 }
 
 // 析构函数

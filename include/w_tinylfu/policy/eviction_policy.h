@@ -27,7 +27,7 @@ public:
     /* 从probation 升至 protected */
     void onAccess(Node* n);
     /* 从窗口缓存升至 probation */
-    void onAdd(Node* n);
+    bool onAdd(Node* n);
 
     /* 移除节点 */
     uint32_t eraseNode(Node* node);

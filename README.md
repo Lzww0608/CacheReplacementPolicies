@@ -63,7 +63,3 @@ This project provides efficient, thread-safe, and well-tested implementations of
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
-2025-08-04
-ToDo:
-2. slru: add `size` method, and `get`, `put` method.
-

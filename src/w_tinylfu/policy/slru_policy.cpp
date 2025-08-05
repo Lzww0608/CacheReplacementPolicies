@@ -27,7 +27,7 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::onAccess(Node* node) {
     }
 
     /* protection_ 不为空，竞争 */
-    if (Compete(node, victim) == 0) {
+    if (compete(node, victim) == 0) {
         probation_.remove(node);
         protection_.push_front(node);
         node->is_in_protected = true;
@@ -43,23 +43,24 @@ void CRP::w_tinylfu::SLRU<K, V, Hash>::onAccess(Node* node) {
 
 /* 从窗口缓存升至 probation */
 template <typename K, typename V, typename Hash>
-void CRP::w_tinylfu::SLRU<K, V, Hash>::onAdd(Node* node) {
+bool CRP::w_tinylfu::SLRU<K, V, Hash>::onAdd(Node* node) {
     /* probation_ 有空余，直接升至 probation_ */
     if (probation_.size() < probation_capacity_) {
         probation_.push_front(node);
         key_to_node_[node->key] = node;
-        return;
+        return true;
     }
 
     /* probation_ 已满，竞争 */
-    auto victim = probation.pop_back();
-    if (Compete(node, victim) == 0) {
+    auto victim = probation_.pop_back();
+    if (compete(node, victim) == 0) {
         probation_.push_front(node);
         key_to_node_[node->key] = node;
         delete victim;
+        return true;
     }
 
-    return;
+    return false;
 }
 
 /* 移除主缓存的某一个节点 */
@@ -74,7 +75,7 @@ uint32_t CRP::w_tinylfu::SLRU<K, V, Hash>::eraseNode(Node* node) {
     if (node->is_in_protected) {
         protection_.remove(node);
     } else {
-        protection_.remove(node);
+        probation_.remove(node);
     }
 
     return 0;
@@ -137,36 +138,41 @@ bool CRP::w_tinylfu::SLRU<K, V, Hash>::contains(const K& key) const {
 template <typename K, typename V, typename Hash>
 void CRP::w_tinylfu::SLRU<K, V, Hash>::decay_all_frequencies(double factor) {
     std::unique_lock<std::shared_mutex> protection_write_lock(protection_mutex_);
-    for (auto it = protection_->head_->next; it != protection_->head_; it = it->next;) {
-        it->frequency = static_cast<uint64_t>(it->frequency * factor);
-    }
+    protection_.decay_all_frequencies(factor);
 }
 
 template <typename K, typename V, typename Hash>
 bool CRP::w_tinylfu::SLRU<K, V, Hash>::get(const K& key, V& value) {
     /* 因为可能涉及到onAdd和onAccess等节点移动操作，使用写锁 */
     std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protection_mutex_);
-    if (!key_to_node_.contains(key)) {
-        return false;
-    }
-
-    auto node = key_to_node_.find(key);
+    
     // 在 protection 部分，直接获取并按照LRU算法移到链表开头
-    if (node->is_in_protected) {
+    if (key_to_node_.contains(key) && key_to_node_[key]->is_in_protected) {
         protection_.get(key, value);
         return true;
     }
 
-    if (loading_cache_.contains(key)) {
-        loading_cache_.get(key, value);
-        /* onAdd 操作 */
-        return true;
-    }
-
-    if (probation_.contains(key)) {
-        probation_.get(key, value);
-        /* onAccess 操作 */
-        return true;
+    // 检查是否在主缓存中（probation_ 或 protection_）
+    if (key_to_node_.contains(key)) {
+        auto node = key_to_node_[key];
+        
+        // 在 protection 部分，直接获取并按照LRU算法移到链表开头
+        if (node->is_in_protected) {
+            protection_.get(key, value);
+            return true;
+        }
+        
+        // 在 probation_ 中命中，执行 onAccess 升级操作
+        if (probation_.contains(key)) {
+            probation_.get(key, value);
+            
+            if (probation_.size() >= probation_capacity_) {
+                // 执行 onAccess 操作：从probation升至protected
+                onAccess(node);
+            }
+            
+            return true;
+        }
     }
 
     return false;
@@ -179,13 +185,25 @@ template <typename K, typename V, typename Hash>
 void CRP::w_tinylfu::SLRU<K, V, Hash>::put(const K& key, const V& value) {
     std::scoped_lock<std::shared_mutex, std::shared_mutex> scoped_lock_(probation_mutex_, protection_mutex_);
 
-    if (slru_.contains(key)) {
-        slru_.put(key, value);
+    // 检查是否已存在于主缓存中
+    if (key_to_node_.contains(key)) {
+        auto node = key_to_node_[key];
+        
+        // 更新值
+        node->value = value;
+        
+        // 根据所在区域更新对应的缓存
+        if (node->is_in_protected) {
+            protection_.put(key, value);
+        } else {
+            probation_.put(key, value);
+        }
         return;
     }
 
-    loading_cache_.put(key, value);
-    return;
+    // 新数据，创建Node并添加到probation区
+    auto node = new Node(key, value);
+    onAdd(node);
 }
 
 } // namespace w_tinylfu

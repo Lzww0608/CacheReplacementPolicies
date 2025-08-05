@@ -103,6 +103,7 @@ bool LRUShard<K, V, Hash>::get(const K& key, V& out_value) {
         }
         
         node = it->second;
+        node->frequency++;
         found = true;
         
         // 检查是否过期

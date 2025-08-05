@@ -4,6 +4,12 @@
 #include <cstdint>
 #include <chrono>
 #include <atomic>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include "loading_cache.h"
+#include "../policy/eviction_policy.h"
+#include "../sketch/cms.h"
 
 namespace CRP {
 namespace w_tinylfu {
@@ -14,6 +20,10 @@ constexpr uint32_t DEFAULT_DECAY_INTERVAL = 1000; // 1000 ms
 template <typename K, typename V, typename Hash = std::hash<std::string>>
 class Cache {
 public:
+    Cache(size_t capacity, double decay_factor = DEFAULT_DECAY_FACTOR, 
+          uint32_t decay_interval = DEFAULT_DECAY_INTERVAL);
+    ~Cache();
+
     // 查询缓存：返回是否命中，若命中则通过value输出
     bool get(const K& key, V& value);
 
@@ -28,7 +38,7 @@ public:
 private:
     size_t capacity_;
     double decay_factor_;
-    std::chrono::milliseconds decay_interval_
+    std::chrono::milliseconds decay_interval_;
     LoadingCache<K, V, Hash> loading_cache_;
     SLRU<K, V, Hash> slru_;
     CountMinSketch cms_;
