@@ -58,6 +58,15 @@ This project provides efficient, thread-safe, and well-tested implementations of
   - Minimal memory overhead through probabilistic data structures
   - Excellent performance for real-world workloads
 
+- **SRRIP (Static Re-Reference Interval Prediction)**
+
+  - Cache replacement policy based on re-reference interval prediction
+  - Assigns a Re-Reference Prediction Value (RRPV) counter to each cache entry to estimate the likelihood of future access
+  - Newly inserted entries are given a high RRPV, making them more likely to be evicted if not accessed soon
+  - Eviction is performed by decrementing RRPV counters and selecting entries with the maximum RRPV; efficient for both hardware and software implementations
+  - Delivers excellent performance under high concurrency and complex access patterns; widely used in high-performance caching systems
+
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
