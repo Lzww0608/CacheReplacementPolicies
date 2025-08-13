@@ -13,6 +13,9 @@
 #include <vector>
 #include <cstdint>
 #include <optional>
+#include <mutex>
+#include <memory>
+#include <shared_mutex>
 
 namespace SRRIP {
 
@@ -40,6 +43,8 @@ public:
 private:
     static constexpr uint8_t RRPV_MAX = (1 << RRPV_M_BITS) - 1;
     std::vector<CacheLine> ways_;
+
+    mutable std::shared_mutex mtx_;
 };
 
 }
