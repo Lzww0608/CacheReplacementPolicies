@@ -45,6 +45,7 @@ private:
 
     std::atomic<uint64_t> hit_count_{0};
     std::atomic<uint64_t> miss_count_{0};
+    mutable std::atomic<size_t> replace_count_{0};
 };
 
 
