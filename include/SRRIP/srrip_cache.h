@@ -36,9 +36,10 @@ public:
 
     [[nodiscard]] uint64_t getHitRate() const noexcept;
 
-private:
     // 地址解析辅助函数
     void parseAddress(uint64_t address, uint64_t& tag, size_t& set_index) const;
+
+private:
 
     const size_t associativity_;
     const size_t num_sets_;

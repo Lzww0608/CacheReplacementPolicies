@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsrrip_cache.a CMakeFiles/srrip_cache.dir/src/SRRIP/srrip_cache_instantiations.cpp.o
+/usr/bin/ranlib libsrrip_cache.a

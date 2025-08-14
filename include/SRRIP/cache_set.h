@@ -25,6 +25,19 @@ public:
     // 构造函数，传入该组的相联度（路的数量）
     explicit CacheSet(size_t associativity);
 
+    // 移动构造函数
+    CacheSet(CacheSet&& other) noexcept;
+
+    // 移动赋值运算符
+    CacheSet& operator=(CacheSet&& other) noexcept;
+
+    // 删除拷贝构造函数和赋值运算符
+    CacheSet(const CacheSet&) = delete;
+    CacheSet& operator=(const CacheSet&) = delete;
+
+    // 析构函数
+    ~CacheSet() = default;
+
     // 查找与给定 tag 匹配的 way 索引
     [[nodiscard]] std::optional<size_t> findWay(uint64_t tag) const;
 
@@ -50,7 +63,7 @@ private:
     // max RRPV currently
     uint8_t max_rrpv;
 
-    mutable std::shared_mutex mtx_;
+    mutable std::unique_ptr<std::shared_mutex> mtx_;
 
     struct Stats {
         size_t hits = 0;

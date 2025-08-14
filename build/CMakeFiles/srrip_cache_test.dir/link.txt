@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wextra -O3 -DNDEBUG -march=native CMakeFiles/srrip_cache_test.dir/test/srrip_cache_test.cpp.o -o srrip_cache_test  libsrrip_cache.a /usr/lib/x86_64-linux-gnu/libgtest.a /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/lib/x86_64-linux-gnu/libgtest.a 

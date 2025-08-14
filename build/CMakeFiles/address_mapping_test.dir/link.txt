@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wextra -O3 -DNDEBUG -march=native CMakeFiles/address_mapping_test.dir/test/address_mapping_test.cpp.o -o address_mapping_test  libsrrip_cache.a 

@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wextra -O3 -DNDEBUG -march=native CMakeFiles/bloom_filter_demo.dir/examples/bloom_filter_demo.cpp.o -o bloom_filter_demo  libbloom_filter.a 

@@ -1,8 +1,8 @@
-# CMakeLists.txt for CRP Bloom Filter
-# High-Performance Bloom Filter for W-TinyLFU Cache
+# CMakeLists.txt for CRP Project
+# High-Performance Cache and Bloom Filter Implementation
 
 cmake_minimum_required(VERSION 3.10)
-project(CRP_BloomFilter VERSION 1.0.0 LANGUAGES CXX)
+project(CRP VERSION 1.0.0 LANGUAGES CXX)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -43,33 +43,62 @@ set(BLOOM_FILTER_SOURCES
     src/utils/bloom_filter.cpp
 )
 
+set(SRRIP_CACHE_SOURCES
+    src/SRRIP/srrip_cache_instantiations.cpp
+)
+
 # Create bloom filter library
 add_library(bloom_filter STATIC ${BLOOM_FILTER_SOURCES})
 target_include_directories(bloom_filter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(bloom_filter Threads::Threads)
 
-# Demo executable
+# Create SRRIP cache library
+add_library(srrip_cache STATIC ${SRRIP_CACHE_SOURCES})
+target_include_directories(srrip_cache PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(srrip_cache Threads::Threads)
+
+# Demo executables
 add_executable(bloom_filter_demo 
     examples/bloom_filter_demo.cpp
 )
 target_link_libraries(bloom_filter_demo bloom_filter)
 
+add_executable(srrip_cache_demo
+    examples/srrip_cache_demo.cpp
+)
+target_link_libraries(srrip_cache_demo srrip_cache)
+
+add_executable(address_mapping_test
+    test/address_mapping_test.cpp
+)
+target_link_libraries(address_mapping_test srrip_cache)
+
 # Find GoogleTest
 find_package(GTest QUIET)
 if(GTest_FOUND)
-    # Test executable
+    # Test executables
     add_executable(bloom_filter_test
         test/bloom_filter_test.cpp
-)
+    )
     target_link_libraries(bloom_filter_test 
         bloom_filter
         GTest::gtest 
         GTest::gtest_main
-)
+    )
+
+    add_executable(srrip_cache_test
+        test/srrip_cache_test.cpp
+    )
+    target_link_libraries(srrip_cache_test
+        srrip_cache
+        GTest::gtest
+        GTest::gtest_main
+    )
 
     # Enable testing
     enable_testing()
     add_test(NAME BloomFilterTests COMMAND bloom_filter_test)
+    add_test(NAME SRRIPCacheTests COMMAND srrip_cache_test)
     
     message(STATUS "Google Test found - tests will be built")
 else()
@@ -78,16 +107,20 @@ else()
 endif()
 
 # Installation
-install(TARGETS bloom_filter
+install(TARGETS bloom_filter srrip_cache
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
 )
 
-install(FILES include/utils/bloom_filter.h
-    DESTINATION include/utils
+install(FILES 
+    include/utils/bloom_filter.h
+    include/SRRIP/srrip_cache.h
+    include/SRRIP/cache_set.h
+    include/SRRIP/cache_line.h
+    DESTINATION include
 )
 
-install(TARGETS bloom_filter_demo
+install(TARGETS bloom_filter_demo srrip_cache_demo address_mapping_test
     RUNTIME DESTINATION bin
 )
 

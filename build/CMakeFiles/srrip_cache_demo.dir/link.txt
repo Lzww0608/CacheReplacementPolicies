@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wextra -O3 -DNDEBUG -march=native CMakeFiles/srrip_cache_demo.dir/examples/srrip_cache_demo.cpp.o -o srrip_cache_demo  libsrrip_cache.a 
