@@ -43,8 +43,18 @@ public:
 private:
     static constexpr uint8_t RRPV_MAX = (1 << RRPV_M_BITS) - 1;
     std::vector<CacheLine> ways_;
+    // buckets[r] stores the index of the cache line "RRPV = r"
+    std::vector<std::vector<size_t>> buckets_;
+    //  
+    uint32_t rrpv_presence;
 
     mutable std::shared_mutex mtx_;
+
+    struct Stats {
+        size_t hits = 0;
+        size_t misses = 0;
+        size_t replacements = 0;
+    } stats_;
 };
 
 }
