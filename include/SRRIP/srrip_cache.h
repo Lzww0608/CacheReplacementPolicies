@@ -30,9 +30,11 @@ public:
     [[nodiscard]] uint64_t getMissCount() const noexcept {
         return miss_count_.load(std::memory_order_relaxed);
     }
-    [[nodiscard]] uint64_t getHitRate() const noexcept;
+    [[nodiscard]] uint64_t getReplaceCount() const noexcept {
+        return replace_count_.load(std::memory_order_relaxed);
+    }
 
-    [[nodiscard]] uint64_t getReplaceCount() const noexcept;
+    [[nodiscard]] uint64_t getHitRate() const noexcept;
 
 private:
     // 地址解析辅助函数
