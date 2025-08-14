@@ -45,8 +45,10 @@ private:
     std::vector<CacheLine> ways_;
     // buckets[r] stores the index of the cache line "RRPV = r"
     std::vector<std::vector<size_t>> buckets_;
-    //  
+    // State Bit: if rth bit is 1, there is a cache line "RRPV = r"
     uint32_t rrpv_presence;
+    // max RRPV currently
+    uint8_t max_rrpv;
 
     mutable std::shared_mutex mtx_;
 
