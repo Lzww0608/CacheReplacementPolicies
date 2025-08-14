@@ -84,11 +84,24 @@ bool SRRIPCache<RRPV_M_BITS>::access(uint64_t address) {
 
         // 2. find victim and replace it 
         size_t victim_way = target_set.findVictimWay();
+        replace_count_.fetch_add(1, std::memory_order_relaxed);
         target_set.fillWay(victim_way, tag);
         return false;
     }
 }
 
+template <uint8_t RRPV_M_BITS>
+uint64_t SRRIPCache<RRPV_M_BITS>::getHitRate() const noexcept {
+    uint64_t hits = hit_count_.load(std::memory_order_relaxed);
+    uint64_t misses = miss_count_.load(std::memory_order_relaxed);
+    uint64_t total = hits + misses;
+    if (total == 0) return 0;
+
+    return (hits * 100) / total;
+}
+
+
 
 } // namespace SRRIP
+
 
