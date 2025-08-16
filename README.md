@@ -66,6 +66,15 @@ This project provides efficient, thread-safe, and well-tested implementations of
   - Eviction is performed by decrementing RRPV counters and selecting entries with the maximum RRPV; efficient for both hardware and software implementations
   - Delivers excellent performance under high concurrency and complex access patterns; widely used in high-performance caching systems
 
+- **LIRS (Low Inter-reference Recency Set)**
+
+  - Advanced cache replacement policy designed to improve performance over LRU, especially for workloads with weak locality
+  - Classifies cache blocks into LIR (Low Inter-reference Recency) and HIR (High Inter-reference Recency) based on their access patterns
+  - Maintains a stack (recency list) and a queue to track block status and recency efficiently
+  - Evicts HIR blocks preferentially, while LIR blocks are protected from eviction until their access pattern changes
+  - Adapts dynamically to changing workload characteristics, providing high hit ratios for a wide range of access patterns
+  - Particularly effective for databases, file systems, and other applications with non-uniform or looping access patterns
+
 
 ## 📄 License
 

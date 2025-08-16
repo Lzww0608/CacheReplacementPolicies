@@ -1,6 +1,6 @@
 /*
 @Author: Lzww
-@LastEditTime: 2025-6-28 22:36:48
+@LastEditTime: 2025-8-16 09:14:30
 @Description: 双向链表节点定义
 @Language: C++17
 */
@@ -28,6 +28,8 @@ struct Node: public IntrusiveListNode<Node<K, V>> {
     uint64_t frequency = 1; // LFU访问频率
     uint8_t clock_bit = 0; // Clock算法位
     bool is_in_protected;  // 标记是否在 protected 区
+    bool is_LIRS;  // 标记是否是LIRS缓存节点
+    bool is_resident;  // 标记是否是resident节点
 
     // 构造函数
     Node() : IntrusiveListNode<Node<K, V>>(), key(K()), value(V()), is_in_protected(false) {}
