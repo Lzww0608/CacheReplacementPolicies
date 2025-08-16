@@ -28,7 +28,7 @@ struct Node: public IntrusiveListNode<Node<K, V>> {
     uint64_t frequency = 1; // LFU访问频率
     uint8_t clock_bit = 0; // Clock算法位
     bool is_in_protected;  // 标记是否在 protected 区
-    bool is_LIRS;  // 标记是否是LIRS缓存节点
+    uint32_t irr_value;  // 记录irr的值
     bool is_resident;  // 标记是否是resident节点
 
     // 构造函数
