@@ -224,6 +224,19 @@ srrip_cache_demo/fast:
 .PHONY : srrip_cache_demo/fast
 
 #=============================================================================
+# Target rules for targets named s3fifo_cache_demo
+
+# Build rule for target.
+s3fifo_cache_demo: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s3fifo_cache_demo
+.PHONY : s3fifo_cache_demo
+
+# fast build rule for target.
+s3fifo_cache_demo/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_demo.dir/build.make CMakeFiles/s3fifo_cache_demo.dir/build
+.PHONY : s3fifo_cache_demo/fast
+
+#=============================================================================
 # Target rules for targets named address_mapping_test
 
 # Build rule for target.
@@ -262,6 +275,19 @@ srrip_cache_test/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/srrip_cache_test.dir/build.make CMakeFiles/srrip_cache_test.dir/build
 .PHONY : srrip_cache_test/fast
 
+#=============================================================================
+# Target rules for targets named s3fifo_cache_test
+
+# Build rule for target.
+s3fifo_cache_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 s3fifo_cache_test
+.PHONY : s3fifo_cache_test
+
+# fast build rule for target.
+s3fifo_cache_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_test.dir/build.make CMakeFiles/s3fifo_cache_test.dir/build
+.PHONY : s3fifo_cache_test/fast
+
 examples/bloom_filter_demo.o: examples/bloom_filter_demo.cpp.o
 .PHONY : examples/bloom_filter_demo.o
 
@@ -285,6 +311,30 @@ examples/bloom_filter_demo.s: examples/bloom_filter_demo.cpp.s
 examples/bloom_filter_demo.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/bloom_filter_demo.dir/build.make CMakeFiles/bloom_filter_demo.dir/examples/bloom_filter_demo.cpp.s
 .PHONY : examples/bloom_filter_demo.cpp.s
+
+examples/s3fifo_cache_demo.o: examples/s3fifo_cache_demo.cpp.o
+.PHONY : examples/s3fifo_cache_demo.o
+
+# target to build an object file
+examples/s3fifo_cache_demo.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_demo.dir/build.make CMakeFiles/s3fifo_cache_demo.dir/examples/s3fifo_cache_demo.cpp.o
+.PHONY : examples/s3fifo_cache_demo.cpp.o
+
+examples/s3fifo_cache_demo.i: examples/s3fifo_cache_demo.cpp.i
+.PHONY : examples/s3fifo_cache_demo.i
+
+# target to preprocess a source file
+examples/s3fifo_cache_demo.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_demo.dir/build.make CMakeFiles/s3fifo_cache_demo.dir/examples/s3fifo_cache_demo.cpp.i
+.PHONY : examples/s3fifo_cache_demo.cpp.i
+
+examples/s3fifo_cache_demo.s: examples/s3fifo_cache_demo.cpp.s
+.PHONY : examples/s3fifo_cache_demo.s
+
+# target to generate assembly for a file
+examples/s3fifo_cache_demo.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_demo.dir/build.make CMakeFiles/s3fifo_cache_demo.dir/examples/s3fifo_cache_demo.cpp.s
+.PHONY : examples/s3fifo_cache_demo.cpp.s
 
 examples/srrip_cache_demo.o: examples/srrip_cache_demo.cpp.o
 .PHONY : examples/srrip_cache_demo.o
@@ -406,6 +456,30 @@ test/bloom_filter_test.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/bloom_filter_test.dir/build.make CMakeFiles/bloom_filter_test.dir/test/bloom_filter_test.cpp.s
 .PHONY : test/bloom_filter_test.cpp.s
 
+test/s3fifo_cache_test.o: test/s3fifo_cache_test.cpp.o
+.PHONY : test/s3fifo_cache_test.o
+
+# target to build an object file
+test/s3fifo_cache_test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_test.dir/build.make CMakeFiles/s3fifo_cache_test.dir/test/s3fifo_cache_test.cpp.o
+.PHONY : test/s3fifo_cache_test.cpp.o
+
+test/s3fifo_cache_test.i: test/s3fifo_cache_test.cpp.i
+.PHONY : test/s3fifo_cache_test.i
+
+# target to preprocess a source file
+test/s3fifo_cache_test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_test.dir/build.make CMakeFiles/s3fifo_cache_test.dir/test/s3fifo_cache_test.cpp.i
+.PHONY : test/s3fifo_cache_test.cpp.i
+
+test/s3fifo_cache_test.s: test/s3fifo_cache_test.cpp.s
+.PHONY : test/s3fifo_cache_test.s
+
+# target to generate assembly for a file
+test/s3fifo_cache_test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_test.dir/build.make CMakeFiles/s3fifo_cache_test.dir/test/s3fifo_cache_test.cpp.s
+.PHONY : test/s3fifo_cache_test.cpp.s
+
 test/srrip_cache_test.o: test/srrip_cache_test.cpp.o
 .PHONY : test/srrip_cache_test.o
 
@@ -447,12 +521,17 @@ help:
 	@echo "... bloom_filter"
 	@echo "... bloom_filter_demo"
 	@echo "... bloom_filter_test"
+	@echo "... s3fifo_cache_demo"
+	@echo "... s3fifo_cache_test"
 	@echo "... srrip_cache"
 	@echo "... srrip_cache_demo"
 	@echo "... srrip_cache_test"
 	@echo "... examples/bloom_filter_demo.o"
 	@echo "... examples/bloom_filter_demo.i"
 	@echo "... examples/bloom_filter_demo.s"
+	@echo "... examples/s3fifo_cache_demo.o"
+	@echo "... examples/s3fifo_cache_demo.i"
+	@echo "... examples/s3fifo_cache_demo.s"
 	@echo "... examples/srrip_cache_demo.o"
 	@echo "... examples/srrip_cache_demo.i"
 	@echo "... examples/srrip_cache_demo.s"
@@ -468,6 +547,9 @@ help:
 	@echo "... test/bloom_filter_test.o"
 	@echo "... test/bloom_filter_test.i"
 	@echo "... test/bloom_filter_test.s"
+	@echo "... test/s3fifo_cache_test.o"
+	@echo "... test/s3fifo_cache_test.i"
+	@echo "... test/s3fifo_cache_test.s"
 	@echo "... test/srrip_cache_test.o"
 	@echo "... test/srrip_cache_test.i"
 	@echo "... test/srrip_cache_test.s"

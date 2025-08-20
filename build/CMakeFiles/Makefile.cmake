@@ -57,7 +57,9 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/srrip_cache.dir/DependInfo.cmake"
   "CMakeFiles/bloom_filter_demo.dir/DependInfo.cmake"
   "CMakeFiles/srrip_cache_demo.dir/DependInfo.cmake"
+  "CMakeFiles/s3fifo_cache_demo.dir/DependInfo.cmake"
   "CMakeFiles/address_mapping_test.dir/DependInfo.cmake"
   "CMakeFiles/bloom_filter_test.dir/DependInfo.cmake"
   "CMakeFiles/srrip_cache_test.dir/DependInfo.cmake"
+  "CMakeFiles/s3fifo_cache_test.dir/DependInfo.cmake"
   )

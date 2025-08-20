@@ -1,5 +1,5 @@
-CMakeFiles/srrip_cache_test.dir/test/srrip_cache_test.cpp.o: \
- /home/lab2439/lzww/CRP/test/srrip_cache_test.cpp \
+CMakeFiles/s3fifo_cache_test.dir/test/s3fifo_cache_test.cpp.o: \
+ /home/lab2439/lzww/CRP/test/s3fifo_cache_test.cpp \
  /usr/include/stdc-predef.h /usr/include/gtest/gtest.h \
  /usr/include/c++/11/cstddef \
  /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h \
@@ -272,7 +272,16 @@ CMakeFiles/srrip_cache_test.dir/test/srrip_cache_test.cpp.o: \
  /usr/include/c++/11/cassert /usr/include/assert.h \
  /usr/include/gtest/gtest-test-part.h /usr/include/gtest/gtest_prod.h \
  /usr/include/gtest/gtest-typed-test.h \
- /usr/include/gtest/gtest_pred_impl.h /usr/include/c++/11/random \
+ /usr/include/gtest/gtest_pred_impl.h \
+ /home/lab2439/lzww/CRP/test/../include/s3fifo/cache.h \
+ /home/lab2439/lzww/CRP/test/../include/s3fifo/../utils/node.h \
+ /usr/include/c++/11/chrono /usr/include/c++/11/ratio \
+ /home/lab2439/lzww/CRP/test/../include/s3fifo/../utils/intrusive_list.h \
+ /home/lab2439/lzww/CRP/test/../include/s3fifo/../utils/node.h \
+ /usr/include/c++/11/mutex /usr/include/c++/11/bits/std_mutex.h \
+ /usr/include/c++/11/bits/unique_lock.h /usr/include/c++/11/thread \
+ /usr/include/c++/11/bits/std_thread.h \
+ /usr/include/c++/11/bits/this_thread_sleep.h /usr/include/c++/11/random \
  /usr/include/c++/11/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
@@ -305,12 +314,4 @@ CMakeFiles/srrip_cache_test.dir/test/srrip_cache_test.cpp.o: \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/mwaitintrin.h \
  /usr/include/c++/11/bits/random.tcc /usr/include/c++/11/numeric \
  /usr/include/c++/11/bits/stl_numeric.h \
- /usr/include/c++/11/pstl/glue_numeric_defs.h /usr/include/c++/11/thread \
- /usr/include/c++/11/bits/std_thread.h \
- /usr/include/c++/11/bits/this_thread_sleep.h /usr/include/c++/11/chrono \
- /usr/include/c++/11/ratio \
- /home/lab2439/lzww/CRP/test/../include/SRRIP/srrip_cache.h \
- /home/lab2439/lzww/CRP/test/../include/SRRIP/cache_set.h \
- /home/lab2439/lzww/CRP/test/../include/SRRIP/cache_line.h \
- /usr/include/c++/11/mutex /usr/include/c++/11/bits/std_mutex.h \
- /usr/include/c++/11/bits/unique_lock.h /usr/include/c++/11/shared_mutex
+ /usr/include/c++/11/pstl/glue_numeric_defs.h

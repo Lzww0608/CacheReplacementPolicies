@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wextra -O3 -DNDEBUG -march=native CMakeFiles/s3fifo_cache_test.dir/test/s3fifo_cache_test.cpp.o -o s3fifo_cache_test  /usr/lib/x86_64-linux-gnu/libgtest.a /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/lib/x86_64-linux-gnu/libgtest.a 

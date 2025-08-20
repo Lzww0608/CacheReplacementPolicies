@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -Wextra -O3 -DNDEBUG -march=native CMakeFiles/s3fifo_cache_demo.dir/examples/s3fifo_cache_demo.cpp.o -o s3fifo_cache_demo 

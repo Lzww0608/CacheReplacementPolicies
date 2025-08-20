@@ -57,6 +57,8 @@ add_library(srrip_cache STATIC ${SRRIP_CACHE_SOURCES})
 target_include_directories(srrip_cache PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(srrip_cache Threads::Threads)
 
+# S3FIFO cache is header-only, no separate library needed
+
 # Demo executables
 add_executable(bloom_filter_demo 
     examples/bloom_filter_demo.cpp
@@ -67,6 +69,11 @@ add_executable(srrip_cache_demo
     examples/srrip_cache_demo.cpp
 )
 target_link_libraries(srrip_cache_demo srrip_cache)
+
+add_executable(s3fifo_cache_demo
+    examples/s3fifo_cache_demo.cpp
+)
+target_link_libraries(s3fifo_cache_demo Threads::Threads)
 
 add_executable(address_mapping_test
     test/address_mapping_test.cpp
@@ -95,10 +102,20 @@ if(GTest_FOUND)
         GTest::gtest_main
     )
 
+    add_executable(s3fifo_cache_test
+        test/s3fifo_cache_test.cpp
+    )
+    target_link_libraries(s3fifo_cache_test
+        Threads::Threads
+        GTest::gtest
+        GTest::gtest_main
+    )
+
     # Enable testing
     enable_testing()
     add_test(NAME BloomFilterTests COMMAND bloom_filter_test)
     add_test(NAME SRRIPCacheTests COMMAND srrip_cache_test)
+    add_test(NAME S3FIFOCacheTests COMMAND s3fifo_cache_test)
     
     message(STATUS "Google Test found - tests will be built")
 else()
@@ -117,10 +134,13 @@ install(FILES
     include/SRRIP/srrip_cache.h
     include/SRRIP/cache_set.h
     include/SRRIP/cache_line.h
+    include/s3fifo/cache.h
+    include/utils/node.h
+    include/utils/intrusive_list.h
     DESTINATION include
 )
 
-install(TARGETS bloom_filter_demo srrip_cache_demo address_mapping_test
+install(TARGETS bloom_filter_demo srrip_cache_demo s3fifo_cache_demo address_mapping_test
     RUNTIME DESTINATION bin
 )
 
