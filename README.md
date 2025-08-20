@@ -75,9 +75,18 @@ This project provides efficient, thread-safe, and well-tested implementations of
   - Adapts dynamically to changing workload characteristics, providing high hit ratios for a wide range of access patterns
   - Particularly effective for databases, file systems, and other applications with non-uniform or looping access patterns
 
+- **S3FIFO (Static-Dynamic-Static FIFO)**
+  - Three-tier cache replacement policy with small (S), main (M), and ghost (G) queues
+  - New entries start in the small FIFO queue; frequently accessed items are promoted to the main queue
+  - Uses second-chance algorithm in the main queue for better hit ratios
+  - Ghost queue tracks recently evicted items to handle re-access patterns efficiently
+  - Provides excellent performance with simple implementation and low overhead
+  - Particularly effective for workloads with mixed access patterns and temporal locality
+
+
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-
+ToDo: Sieve, GDSF
