@@ -83,6 +83,14 @@ This project provides efficient, thread-safe, and well-tested implementations of
   - Provides excellent performance with simple implementation and low overhead
   - Particularly effective for workloads with mixed access patterns and temporal locality
 
+- **Sieve**
+  - Simple and efficient cache replacement policy that approximates FIFO with better hit ratios
+  - Uses a single "visited" bit per cache entry to track recent access
+  - During eviction, scans entries in FIFO order, clearing visited bits and skipping visited entries
+  - Evicts the first unvisited entry encountered, providing a second chance for recently accessed items
+  - Maintains FIFO insertion order while giving preference to recently accessed entries
+  - Offers excellent performance with minimal memory overhead and simple implementation
+  - Particularly effective for workloads with temporal locality and streaming access patterns
 
 
 ## 📄 License
