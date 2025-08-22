@@ -1,6 +1,6 @@
 /*
 @Author: Lzww
-@LastEditTime: 2025-8-21 22:39:40
+@LastEditTime: 2025-8-22 21:57:34
 @Description: Sieve Cache
 @Language: C++17
 */
@@ -47,12 +47,16 @@ public:
 
 private:
 
+    void addToHead(Node<K, V>* node);
+    void removeNode(Node<K, V>* node);
+    void moveToHead(Node<K, V>* node);
+    
+    Node<K, V>* evict();
 
 private:
     mutable std::mutex mtx_;
     std::unordered_map<K, Node<K, V>*> map_;
     Node<K, V>* head_;
-    Node<K, V>* tail_;
     Node<K, V>* hand_;
 
     uint32_t capacity_;
