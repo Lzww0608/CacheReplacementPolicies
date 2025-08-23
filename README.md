@@ -92,6 +92,15 @@ This project provides efficient, thread-safe, and well-tested implementations of
   - Offers excellent performance with minimal memory overhead and simple implementation
   - Particularly effective for workloads with temporal locality and streaming access patterns
 
+- **GDSF (Greedy Dual Size Frequency)**
+  - Advanced cache replacement policy that considers both object size and access frequency
+  - Assigns a priority value to each cache entry based on frequency, size, and aging factor
+  - Prioritizes smaller, more frequently accessed objects for better cache utilization
+  - Uses an aging mechanism to prevent stale entries from occupying cache indefinitely
+  - Particularly effective for web caches and content delivery networks where object sizes vary significantly
+  - Provides excellent hit ratios and byte hit ratios for heterogeneous workloads
+  - Balances between maximizing hit count and minimizing bandwidth usage
+
 
 ## 📄 License
 
