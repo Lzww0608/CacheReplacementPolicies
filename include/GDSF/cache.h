@@ -1,6 +1,6 @@
 /*
 @Author: Lzww  
-@LastEditTime: 2025-8-23 18:19:22
+@LastEditTime: 2025-8-23 21:22:36
 @Description: GDSF Cache
 @Language: C++17
 */
@@ -18,7 +18,7 @@
 #include <cmath>
 #include <cstdint>
 
-using namespace CRP;
+// using namespace CRP;
 
 namespace GDSF {
 
@@ -27,13 +27,11 @@ class GDSFCache {
 public:
     explicit GDSFCache(size_t capacity, double l_value = 0.5);
 
-    void put(const K& key, const V& value, size_t size);
+    bool put(const K& key, const V& value, size_t size);
 
-    std::optional<V> get(const K& key) const;
+    [[nodiscard]] std::optional<V> get(const K& key);
 
-    bool erase(const K& key);
-
-    bool contains(const K& key) const;
+    [[nodiscard]] bool contains(const K& key) const;
 
     [[nodiscard]] size_t size() const;
 
@@ -41,11 +39,13 @@ public:
 
     [[nodiscard]] double count() const;
 private:
+    void erase(const K& key);
+
     void evict(size_t needed_space);
 
-    double frequency_function(size_t count) const;
 
-    double calculate_priority(size_t frequency) const;
+
+    double calculate_priority(size_t frequency, size_t size) const;
 private:
     struct Node {
         K key;
@@ -53,6 +53,9 @@ private:
         size_t size;
         size_t frequency;
         double priority;
+
+        Node(const K& key, const V& value, size_t size, double priority)
+            : key(key), value(value), size(size), frequency(1), priority(priority) {}
     };
 
     struct NodeComparator {
