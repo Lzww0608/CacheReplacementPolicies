@@ -101,9 +101,27 @@ This project provides efficient, thread-safe, and well-tested implementations of
   - Provides excellent hit ratios and byte hit ratios for heterogeneous workloads
   - Balances between maximizing hit count and minimizing bandwidth usage
 
+- **BRRIP (Bimodal Re-Reference Interval Prediction)**
+  - Enhanced version of SRRIP that uses bimodal insertion policy
+  - Combines the benefits of LRU and SRRIP by using two different insertion policies
+  - Most new entries are inserted with high RRPV (SRRIP behavior), while a small fraction are inserted with low RRPV (LRU behavior)
+  - Uses a bimodal throttle parameter (typically ε = 1/32) to control the insertion policy selection
+  - Provides robustness against both scan-resistant and thrash-resistant workloads
+  - Delivers superior performance compared to pure SRRIP or LRU across diverse access patterns
+  - Widely adopted in modern processor caches and high-performance storage systems
+
+- **DRRIP (Dynamic Re-Reference Interval Prediction)**
+  - Adaptive cache replacement policy that dynamically switches between SRRIP and BRRIP
+  - Uses set dueling technique to continuously monitor the performance of both policies
+  - Maintains dedicated sets for SRRIP and BRRIP, with follower sets adopting the better-performing policy
+  - Employs a Policy Selection Counter (PSEL) to track which policy is currently performing better
+  - Automatically adapts to changing workload characteristics without manual tuning
+  - Provides the best of both worlds: scan resistance and thrash resistance
+  - Particularly effective for applications with varying or unknown access patterns
+  - Represents the state-of-the-art in adaptive cache replacement policies
+
+
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-ToDo: Sieve, GDSF
