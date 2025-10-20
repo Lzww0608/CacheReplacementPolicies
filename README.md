@@ -101,6 +101,18 @@ This project provides efficient, thread-safe, and well-tested implementations of
   - Provides excellent hit ratios and byte hit ratios for heterogeneous workloads
   - Balances between maximizing hit count and minimizing bandwidth usage
 
+## ToDo:
+
+- **MGLRU (Multi-Generational LRU)**
+  - Advanced cache replacement policy that extends traditional LRU with multiple generations
+  - Divides cache entries into multiple age groups (generations) based on access recency and frequency
+  - Uses a hierarchical aging mechanism where entries progress through generations based on access patterns
+  - Maintains separate LRU lists for each generation, allowing fine-grained eviction decisions
+  - Provides better scan resistance compared to traditional LRU by protecting frequently accessed items
+  - Adapts to workload changes by dynamically adjusting generation boundaries and promotion policies
+  - Particularly effective for memory management in operating systems and large-scale caching systems
+  - Offers excellent performance for workloads with mixed temporal and spatial locality patterns
+
 - **BRRIP (Bimodal Re-Reference Interval Prediction)**
   - Enhanced version of SRRIP that uses bimodal insertion policy
   - Combines the benefits of LRU and SRRIP by using two different insertion policies
