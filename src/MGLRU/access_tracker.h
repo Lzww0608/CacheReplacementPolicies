@@ -1,3 +1,10 @@
+/*
+@Author: Lzww
+@LastEditTime: 2025-10-26 21:58:02
+@Description: MGLRU Access Tracker Implementation
+@Language: C++17
+*/
+
 #ifndef ACCESS_TRACKER_H
 #define ACCESS_TRACKER_H
 
@@ -5,6 +12,7 @@
 
 #include <vector>
 #include <atomic>
+#include <cstddef>
 
 using BitSet = std::atomic<uint64_t>;
 
@@ -13,6 +21,14 @@ public:
     // size is the power of 2
     explicit AccessTracker(size_t size);
     ~AccessTracker() = default;
+    
+    // Disable copy (atomic is not copyable)
+    AccessTracker(const AccessTracker&) = delete;
+    AccessTracker& operator=(const AccessTracker&) = delete;
+    
+    // Enable move
+    AccessTracker(AccessTracker&&) = default;
+    AccessTracker& operator=(AccessTracker&&) = default;
 
     // set visited bit for the page frame
     void set(PageFrameId page_id);

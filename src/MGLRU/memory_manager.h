@@ -1,3 +1,10 @@
+/*
+@Author: Lzww
+@LastEditTime: 2025-10-26 21:58:12
+@Description: MGLRU Memory Manager Implementation
+@Language: C++17
+*/
+
 #ifndef MEMORY_MANAGER_H
 #define MEMORY_MANAGER_H
 
@@ -8,11 +15,14 @@
 #include <list>
 #include <mutex>
 #include <condition_variable>
+#include <thread>
+#include <optional>
+#include <unordered_map>
 
 class MemoryManager {
 public:
     MemoryManager(size_t capacity, size_t num_generations);
-    ~MemoryManager() = default;
+    ~MemoryManager();
 
     // emulate the physical page frame allocation
     // may be blocked if it's full
@@ -40,20 +50,18 @@ private:
     const size_t high_watermark_;
     const size_t min_watermark_;
 
-    std::mutex mtx_;
+    mutable std::mutex mtx_;  // mutable for const member functions
     MGLRU mglru_;
 
     // emulate the physical page frame pool
     std::vector<PageFrameId> physical_frames_list_;
-    // track all active meta data 
-    std::unordered_map<PageFrameId, PageMetadata> page_table_;
     // track all free pages
     std::list<PageFrameId> free_list_;
 
-    std::thread reclaimed_thread_;
-
-    // backend thread  
-    std::thread reclaimed_thread_;
+    // background reclaim thread (emulate kswapd)
+    std::thread reclaim_thread_;
     std::condition_variable cv_;
     bool stop_thread_ = false;
-}
+};
+
+#endif

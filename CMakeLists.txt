@@ -47,6 +47,14 @@ set(SRRIP_CACHE_SOURCES
     src/SRRIP/srrip_cache_instantiations.cpp
 )
 
+set(MGLRU_SOURCES
+    src/MGLRU/access_tracker.cpp
+    src/MGLRU/generation.cpp
+    src/MGLRU/pid_controller.cpp
+    src/MGLRU/mglru_core.cpp
+    src/MGLRU/manager.cpp
+)
+
 # Create bloom filter library
 add_library(bloom_filter STATIC ${BLOOM_FILTER_SOURCES})
 target_include_directories(bloom_filter PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -56,6 +64,11 @@ target_link_libraries(bloom_filter Threads::Threads)
 add_library(srrip_cache STATIC ${SRRIP_CACHE_SOURCES})
 target_include_directories(srrip_cache PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(srrip_cache Threads::Threads)
+
+# Create MGLRU library
+add_library(mglru STATIC ${MGLRU_SOURCES})
+target_include_directories(mglru PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(mglru Threads::Threads)
 
 # S3FIFO cache is header-only, no separate library needed
 
@@ -111,11 +124,21 @@ if(GTest_FOUND)
         GTest::gtest_main
     )
 
+    add_executable(mglru_test
+        src/MGLRU/main.cpp
+    )
+    target_link_libraries(mglru_test
+        mglru
+        GTest::gtest
+        GTest::gtest_main
+    )
+
     # Enable testing
     enable_testing()
     add_test(NAME BloomFilterTests COMMAND bloom_filter_test)
     add_test(NAME SRRIPCacheTests COMMAND srrip_cache_test)
     add_test(NAME S3FIFOCacheTests COMMAND s3fifo_cache_test)
+    add_test(NAME MGLRUTests COMMAND mglru_test)
     
     message(STATUS "Google Test found - tests will be built")
 else()
@@ -124,7 +147,7 @@ else()
 endif()
 
 # Installation
-install(TARGETS bloom_filter srrip_cache
+install(TARGETS bloom_filter srrip_cache mglru
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
 )

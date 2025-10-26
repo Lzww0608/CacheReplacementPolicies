@@ -55,6 +55,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/bloom_filter.dir/DependInfo.cmake"
   "CMakeFiles/srrip_cache.dir/DependInfo.cmake"
+  "CMakeFiles/mglru.dir/DependInfo.cmake"
   "CMakeFiles/bloom_filter_demo.dir/DependInfo.cmake"
   "CMakeFiles/srrip_cache_demo.dir/DependInfo.cmake"
   "CMakeFiles/s3fifo_cache_demo.dir/DependInfo.cmake"
@@ -62,4 +63,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/bloom_filter_test.dir/DependInfo.cmake"
   "CMakeFiles/srrip_cache_test.dir/DependInfo.cmake"
   "CMakeFiles/s3fifo_cache_test.dir/DependInfo.cmake"
+  "CMakeFiles/mglru_test.dir/DependInfo.cmake"
   )

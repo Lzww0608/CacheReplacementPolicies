@@ -1,0 +1,127 @@
+Start testing: Oct 26 21:34 CST
+----------------------------------------------------------
+4/4 Testing: MGLRUTests
+4/4 Test: MGLRUTests
+Command: "/home/lab2439/lzww/CRP/build/mglru_test"
+Directory: /home/lab2439/lzww/CRP/build
+"MGLRUTests" start time: Oct 26 21:34 CST
+Output:
+----------------------------------------------------------
+[==========] Running 19 tests from 4 test suites.
+[----------] Global test environment set-up.
+[----------] 3 tests from AccessTrackerTest
+[ RUN      ] AccessTrackerTest.SetAndCheck
+[       OK ] AccessTrackerTest.SetAndCheck (0 ms)
+[ RUN      ] AccessTrackerTest.MultiplePages
+[       OK ] AccessTrackerTest.MultiplePages (0 ms)
+[ RUN      ] AccessTrackerTest.ClearAll
+[       OK ] AccessTrackerTest.ClearAll (0 ms)
+[----------] 3 tests from AccessTrackerTest (0 ms total)
+
+[----------] 3 tests from GenerationTest
+[ RUN      ] GenerationTest.AddAndRemovePage
+[       OK ] GenerationTest.AddAndRemovePage (0 ms)
+[ RUN      ] GenerationTest.MultiplePages
+[       OK ] GenerationTest.MultiplePages (0 ms)
+[ RUN      ] GenerationTest.TrackerIntegration
+[       OK ] GenerationTest.TrackerIntegration (0 ms)
+[----------] 3 tests from GenerationTest (0 ms total)
+
+[----------] 3 tests from PidControllerTest
+[ RUN      ] PidControllerTest.InitialIntensity
+[       OK ] PidControllerTest.InitialIntensity (0 ms)
+[ RUN      ] PidControllerTest.UpdateMetrics
+[       OK ] PidControllerTest.UpdateMetrics (0 ms)
+[ RUN      ] PidControllerTest.MultipleUpdates
+[       OK ] PidControllerTest.MultipleUpdates (0 ms)
+[----------] 3 tests from PidControllerTest (0 ms total)
+
+[----------] 10 tests from MGLRUTest
+[ RUN      ] MGLRUTest.AddPage
+[       OK ] MGLRUTest.AddPage (0 ms)
+[ RUN      ] MGLRUTest.AddMultiplePages
+[       OK ] MGLRUTest.AddMultiplePages (0 ms)
+[ RUN      ] MGLRUTest.AccessPage
+[       OK ] MGLRUTest.AccessPage (0 ms)
+[ RUN      ] MGLRUTest.ScanAndReclaimEmpty
+[       OK ] MGLRUTest.ScanAndReclaimEmpty (0 ms)
+[ RUN      ] MGLRUTest.ScanAndReclaimWithoutAccess
+[       OK ] MGLRUTest.ScanAndReclaimWithoutAccess (0 ms)
+[ RUN      ] MGLRUTest.ScanAndReclaimWithAccess
+[       OK ] MGLRUTest.ScanAndReclaimWithAccess (0 ms)
+[ RUN      ] MGLRUTest.EvictionCorrectness
+[       OK ] MGLRUTest.EvictionCorrectness (0 ms)
+[ RUN      ] MGLRUTest.AccessedPagesNotEvictedImmediately
+[       OK ] MGLRUTest.AccessedPagesNotEvictedImmediately (0 ms)
+[ RUN      ] MGLRUTest.LargeNumberOfPages
+Total scanned: 1000
+Total evicted: 1000
+[       OK ] MGLRUTest.LargeNumberOfPages (0 ms)
+[ RUN      ] MGLRUTest.WorkloadSimulation
+
+=== Workload Simulation Test ===
+Round 0: Scanned=0, Evicted=0, Promoted=0
+Round 1: Scanned=0, Evicted=0, Promoted=0
+Round 2: Scanned=0, Evicted=0, Promoted=0
+Round 3: Scanned=20, Evicted=20, Promoted=0
+Round 4: Scanned=20, Evicted=20, Promoted=0
+Round 5: Scanned=20, Evicted=20, Promoted=0
+Round 6: Scanned=20, Evicted=10, Promoted=10
+Round 7: Scanned=20, Evicted=0, Promoted=20
+Round 8: Scanned=20, Evicted=0, Promoted=20
+Round 9: Scanned=10, Evicted=10, Promoted=0
+Round 10: Scanned=20, Evicted=0, Promoted=20
+Round 11: Scanned=20, Evicted=0, Promoted=20
+Round 12: Scanned=20, Evicted=0, Promoted=20
+Round 13: Scanned=20, Evicted=0, Promoted=20
+Round 14: Scanned=20, Evicted=0, Promoted=20
+Round 15: Scanned=20, Evicted=0, Promoted=20
+Round 16: Scanned=20, Evicted=0, Promoted=20
+Round 17: Scanned=20, Evicted=0, Promoted=20
+Round 18: Scanned=20, Evicted=0, Promoted=20
+Round 19: Scanned=20, Evicted=0, Promoted=20
+Round 20: Scanned=20, Evicted=0, Promoted=20
+Round 21: Scanned=20, Evicted=0, Promoted=20
+Round 22: Scanned=20, Evicted=0, Promoted=20
+Round 23: Scanned=20, Evicted=0, Promoted=20
+Round 24: Scanned=20, Evicted=0, Promoted=20
+Round 25: Scanned=20, Evicted=0, Promoted=20
+Round 26: Scanned=20, Evicted=0, Promoted=20
+Round 27: Scanned=20, Evicted=0, Promoted=20
+Round 28: Scanned=20, Evicted=0, Promoted=20
+Round 29: Scanned=20, Evicted=0, Promoted=20
+Round 30: Scanned=20, Evicted=0, Promoted=20
+Round 31: Scanned=20, Evicted=0, Promoted=20
+Round 32: Scanned=20, Evicted=0, Promoted=20
+Round 33: Scanned=20, Evicted=0, Promoted=20
+Round 34: Scanned=20, Evicted=0, Promoted=20
+Round 35: Scanned=20, Evicted=0, Promoted=20
+Round 36: Scanned=20, Evicted=0, Promoted=20
+Round 37: Scanned=20, Evicted=0, Promoted=20
+Round 38: Scanned=20, Evicted=0, Promoted=20
+Round 39: Scanned=20, Evicted=0, Promoted=20
+Round 40: Scanned=20, Evicted=0, Promoted=20
+Round 41: Scanned=20, Evicted=0, Promoted=20
+Round 42: Scanned=20, Evicted=0, Promoted=20
+Round 43: Scanned=20, Evicted=0, Promoted=20
+Round 44: Scanned=20, Evicted=0, Promoted=20
+Round 45: Scanned=20, Evicted=0, Promoted=20
+Round 46: Scanned=20, Evicted=0, Promoted=20
+Round 47: Scanned=20, Evicted=0, Promoted=20
+Round 48: Scanned=20, Evicted=0, Promoted=20
+Round 49: Scanned=20, Evicted=0, Promoted=20
+[       OK ] MGLRUTest.WorkloadSimulation (0 ms)
+[----------] 10 tests from MGLRUTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 19 tests from 4 test suites ran. (0 ms total)
+[  PASSED  ] 19 tests.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"MGLRUTests" end time: Oct 26 21:34 CST
+"MGLRUTests" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 26 21:34 CST

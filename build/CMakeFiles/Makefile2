@@ -65,6 +65,7 @@ CMAKE_BINARY_DIR = /home/lab2439/lzww/CRP/build
 # The main recursive "all" target.
 all: CMakeFiles/bloom_filter.dir/all
 all: CMakeFiles/srrip_cache.dir/all
+all: CMakeFiles/mglru.dir/all
 all: CMakeFiles/bloom_filter_demo.dir/all
 all: CMakeFiles/srrip_cache_demo.dir/all
 all: CMakeFiles/s3fifo_cache_demo.dir/all
@@ -72,6 +73,7 @@ all: CMakeFiles/address_mapping_test.dir/all
 all: CMakeFiles/bloom_filter_test.dir/all
 all: CMakeFiles/srrip_cache_test.dir/all
 all: CMakeFiles/s3fifo_cache_test.dir/all
+all: CMakeFiles/mglru_test.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -81,6 +83,7 @@ preinstall:
 # The main recursive "clean" target.
 clean: CMakeFiles/bloom_filter.dir/clean
 clean: CMakeFiles/srrip_cache.dir/clean
+clean: CMakeFiles/mglru.dir/clean
 clean: CMakeFiles/bloom_filter_demo.dir/clean
 clean: CMakeFiles/srrip_cache_demo.dir/clean
 clean: CMakeFiles/s3fifo_cache_demo.dir/clean
@@ -88,6 +91,7 @@ clean: CMakeFiles/address_mapping_test.dir/clean
 clean: CMakeFiles/bloom_filter_test.dir/clean
 clean: CMakeFiles/srrip_cache_test.dir/clean
 clean: CMakeFiles/s3fifo_cache_test.dir/clean
+clean: CMakeFiles/mglru_test.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -123,7 +127,7 @@ CMakeFiles/bloom_filter.dir/clean:
 CMakeFiles/srrip_cache.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/srrip_cache.dir/build.make CMakeFiles/srrip_cache.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/srrip_cache.dir/build.make CMakeFiles/srrip_cache.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=13,14 "Built target srrip_cache"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=21,22 "Built target srrip_cache"
 .PHONY : CMakeFiles/srrip_cache.dir/all
 
 # Build rule for subdir invocation for target.
@@ -141,6 +145,32 @@ srrip_cache: CMakeFiles/srrip_cache.dir/rule
 CMakeFiles/srrip_cache.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/srrip_cache.dir/build.make CMakeFiles/srrip_cache.dir/clean
 .PHONY : CMakeFiles/srrip_cache.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/mglru.dir
+
+# All Build rule for target.
+CMakeFiles/mglru.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=9,10,11,12,13,14 "Built target mglru"
+.PHONY : CMakeFiles/mglru.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/mglru.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lab2439/lzww/CRP/build/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mglru.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lab2439/lzww/CRP/build/CMakeFiles 0
+.PHONY : CMakeFiles/mglru.dir/rule
+
+# Convenience name for target.
+mglru: CMakeFiles/mglru.dir/rule
+.PHONY : mglru
+
+# clean rule for target.
+CMakeFiles/mglru.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/clean
+.PHONY : CMakeFiles/mglru.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/bloom_filter_demo.dir
@@ -175,7 +205,7 @@ CMakeFiles/bloom_filter_demo.dir/clean:
 CMakeFiles/srrip_cache_demo.dir/all: CMakeFiles/srrip_cache.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/srrip_cache_demo.dir/build.make CMakeFiles/srrip_cache_demo.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/srrip_cache_demo.dir/build.make CMakeFiles/srrip_cache_demo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=15,16 "Built target srrip_cache_demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=23,24 "Built target srrip_cache_demo"
 .PHONY : CMakeFiles/srrip_cache_demo.dir/all
 
 # Build rule for subdir invocation for target.
@@ -201,7 +231,7 @@ CMakeFiles/srrip_cache_demo.dir/clean:
 CMakeFiles/s3fifo_cache_demo.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_demo.dir/build.make CMakeFiles/s3fifo_cache_demo.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_demo.dir/build.make CMakeFiles/s3fifo_cache_demo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=9,10 "Built target s3fifo_cache_demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=17,18 "Built target s3fifo_cache_demo"
 .PHONY : CMakeFiles/s3fifo_cache_demo.dir/all
 
 # Build rule for subdir invocation for target.
@@ -279,7 +309,7 @@ CMakeFiles/bloom_filter_test.dir/clean:
 CMakeFiles/srrip_cache_test.dir/all: CMakeFiles/srrip_cache.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/srrip_cache_test.dir/build.make CMakeFiles/srrip_cache_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/srrip_cache_test.dir/build.make CMakeFiles/srrip_cache_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=17,18 "Built target srrip_cache_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=25,26 "Built target srrip_cache_test"
 .PHONY : CMakeFiles/srrip_cache_test.dir/all
 
 # Build rule for subdir invocation for target.
@@ -305,7 +335,7 @@ CMakeFiles/srrip_cache_test.dir/clean:
 CMakeFiles/s3fifo_cache_test.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_test.dir/build.make CMakeFiles/s3fifo_cache_test.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_test.dir/build.make CMakeFiles/s3fifo_cache_test.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=11,12 "Built target s3fifo_cache_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=19,20 "Built target s3fifo_cache_test"
 .PHONY : CMakeFiles/s3fifo_cache_test.dir/all
 
 # Build rule for subdir invocation for target.
@@ -323,6 +353,32 @@ s3fifo_cache_test: CMakeFiles/s3fifo_cache_test.dir/rule
 CMakeFiles/s3fifo_cache_test.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_test.dir/build.make CMakeFiles/s3fifo_cache_test.dir/clean
 .PHONY : CMakeFiles/s3fifo_cache_test.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/mglru_test.dir
+
+# All Build rule for target.
+CMakeFiles/mglru_test.dir/all: CMakeFiles/mglru.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru_test.dir/build.make CMakeFiles/mglru_test.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru_test.dir/build.make CMakeFiles/mglru_test.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/lab2439/lzww/CRP/build/CMakeFiles --progress-num=15,16 "Built target mglru_test"
+.PHONY : CMakeFiles/mglru_test.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/mglru_test.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lab2439/lzww/CRP/build/CMakeFiles 8
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mglru_test.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/lab2439/lzww/CRP/build/CMakeFiles 0
+.PHONY : CMakeFiles/mglru_test.dir/rule
+
+# Convenience name for target.
+mglru_test: CMakeFiles/mglru_test.dir/rule
+.PHONY : mglru_test
+
+# clean rule for target.
+CMakeFiles/mglru_test.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru_test.dir/build.make CMakeFiles/mglru_test.dir/clean
+.PHONY : CMakeFiles/mglru_test.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

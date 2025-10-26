@@ -1,7 +1,15 @@
+/*
+@Author: Lzww
+@LastEditTime: 2025-10-26 21:58:22
+@Description: MGLRU Types Implementation
+@Language: C++17
+*/
+
 #ifndef MGLRU_TYPES_H
 #define MGLRU_TYPES_H
 
 #include <cstdint>
+#include <cstddef>
 #include <list>
 
 // to emulate the physical page frame
@@ -14,6 +22,6 @@ struct PageMetadata {
     PageFrameId id;
     size_t generation_index;
     std::list<PageFrameId>::iterator lru_iterator;
-}
+};
 
 #endif

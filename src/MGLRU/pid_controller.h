@@ -1,3 +1,10 @@
+/*
+@Author: Lzww
+@LastEditTime: 2025-10-26 21:58:32
+@Description: MGLRU PID Controller Implementation
+@Language: C++17
+*/
+
 #ifndef PID_CONTROLLER_H
 #define PID_CONTROLLER_H
 
@@ -17,7 +24,7 @@ public:
     size_t get_scan_intensity() const;
 
 private:
-    doble Kp_, Ki_, Kd_;
+    double Kp_, Ki_, Kd_;
     double integral_ = 0.0;
     double prev_error_ = 0.0;
     // others

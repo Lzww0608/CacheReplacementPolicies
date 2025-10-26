@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmglru.a CMakeFiles/mglru.dir/src/MGLRU/access_tracker.cpp.o CMakeFiles/mglru.dir/src/MGLRU/generation.cpp.o CMakeFiles/mglru.dir/src/MGLRU/pid_controller.cpp.o CMakeFiles/mglru.dir/src/MGLRU/mglru_core.cpp.o CMakeFiles/mglru.dir/src/MGLRU/manager.cpp.o
+/usr/bin/ranlib libmglru.a

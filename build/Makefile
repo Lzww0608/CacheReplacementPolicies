@@ -198,6 +198,19 @@ srrip_cache/fast:
 .PHONY : srrip_cache/fast
 
 #=============================================================================
+# Target rules for targets named mglru
+
+# Build rule for target.
+mglru: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mglru
+.PHONY : mglru
+
+# fast build rule for target.
+mglru/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/build
+.PHONY : mglru/fast
+
+#=============================================================================
 # Target rules for targets named bloom_filter_demo
 
 # Build rule for target.
@@ -288,6 +301,19 @@ s3fifo_cache_test/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/s3fifo_cache_test.dir/build.make CMakeFiles/s3fifo_cache_test.dir/build
 .PHONY : s3fifo_cache_test/fast
 
+#=============================================================================
+# Target rules for targets named mglru_test
+
+# Build rule for target.
+mglru_test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mglru_test
+.PHONY : mglru_test
+
+# fast build rule for target.
+mglru_test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru_test.dir/build.make CMakeFiles/mglru_test.dir/build
+.PHONY : mglru_test/fast
+
 examples/bloom_filter_demo.o: examples/bloom_filter_demo.cpp.o
 .PHONY : examples/bloom_filter_demo.o
 
@@ -359,6 +385,150 @@ examples/srrip_cache_demo.s: examples/srrip_cache_demo.cpp.s
 examples/srrip_cache_demo.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/srrip_cache_demo.dir/build.make CMakeFiles/srrip_cache_demo.dir/examples/srrip_cache_demo.cpp.s
 .PHONY : examples/srrip_cache_demo.cpp.s
+
+src/MGLRU/access_tracker.o: src/MGLRU/access_tracker.cpp.o
+.PHONY : src/MGLRU/access_tracker.o
+
+# target to build an object file
+src/MGLRU/access_tracker.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/access_tracker.cpp.o
+.PHONY : src/MGLRU/access_tracker.cpp.o
+
+src/MGLRU/access_tracker.i: src/MGLRU/access_tracker.cpp.i
+.PHONY : src/MGLRU/access_tracker.i
+
+# target to preprocess a source file
+src/MGLRU/access_tracker.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/access_tracker.cpp.i
+.PHONY : src/MGLRU/access_tracker.cpp.i
+
+src/MGLRU/access_tracker.s: src/MGLRU/access_tracker.cpp.s
+.PHONY : src/MGLRU/access_tracker.s
+
+# target to generate assembly for a file
+src/MGLRU/access_tracker.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/access_tracker.cpp.s
+.PHONY : src/MGLRU/access_tracker.cpp.s
+
+src/MGLRU/generation.o: src/MGLRU/generation.cpp.o
+.PHONY : src/MGLRU/generation.o
+
+# target to build an object file
+src/MGLRU/generation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/generation.cpp.o
+.PHONY : src/MGLRU/generation.cpp.o
+
+src/MGLRU/generation.i: src/MGLRU/generation.cpp.i
+.PHONY : src/MGLRU/generation.i
+
+# target to preprocess a source file
+src/MGLRU/generation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/generation.cpp.i
+.PHONY : src/MGLRU/generation.cpp.i
+
+src/MGLRU/generation.s: src/MGLRU/generation.cpp.s
+.PHONY : src/MGLRU/generation.s
+
+# target to generate assembly for a file
+src/MGLRU/generation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/generation.cpp.s
+.PHONY : src/MGLRU/generation.cpp.s
+
+src/MGLRU/main.o: src/MGLRU/main.cpp.o
+.PHONY : src/MGLRU/main.o
+
+# target to build an object file
+src/MGLRU/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru_test.dir/build.make CMakeFiles/mglru_test.dir/src/MGLRU/main.cpp.o
+.PHONY : src/MGLRU/main.cpp.o
+
+src/MGLRU/main.i: src/MGLRU/main.cpp.i
+.PHONY : src/MGLRU/main.i
+
+# target to preprocess a source file
+src/MGLRU/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru_test.dir/build.make CMakeFiles/mglru_test.dir/src/MGLRU/main.cpp.i
+.PHONY : src/MGLRU/main.cpp.i
+
+src/MGLRU/main.s: src/MGLRU/main.cpp.s
+.PHONY : src/MGLRU/main.s
+
+# target to generate assembly for a file
+src/MGLRU/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru_test.dir/build.make CMakeFiles/mglru_test.dir/src/MGLRU/main.cpp.s
+.PHONY : src/MGLRU/main.cpp.s
+
+src/MGLRU/manager.o: src/MGLRU/manager.cpp.o
+.PHONY : src/MGLRU/manager.o
+
+# target to build an object file
+src/MGLRU/manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/manager.cpp.o
+.PHONY : src/MGLRU/manager.cpp.o
+
+src/MGLRU/manager.i: src/MGLRU/manager.cpp.i
+.PHONY : src/MGLRU/manager.i
+
+# target to preprocess a source file
+src/MGLRU/manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/manager.cpp.i
+.PHONY : src/MGLRU/manager.cpp.i
+
+src/MGLRU/manager.s: src/MGLRU/manager.cpp.s
+.PHONY : src/MGLRU/manager.s
+
+# target to generate assembly for a file
+src/MGLRU/manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/manager.cpp.s
+.PHONY : src/MGLRU/manager.cpp.s
+
+src/MGLRU/mglru_core.o: src/MGLRU/mglru_core.cpp.o
+.PHONY : src/MGLRU/mglru_core.o
+
+# target to build an object file
+src/MGLRU/mglru_core.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/mglru_core.cpp.o
+.PHONY : src/MGLRU/mglru_core.cpp.o
+
+src/MGLRU/mglru_core.i: src/MGLRU/mglru_core.cpp.i
+.PHONY : src/MGLRU/mglru_core.i
+
+# target to preprocess a source file
+src/MGLRU/mglru_core.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/mglru_core.cpp.i
+.PHONY : src/MGLRU/mglru_core.cpp.i
+
+src/MGLRU/mglru_core.s: src/MGLRU/mglru_core.cpp.s
+.PHONY : src/MGLRU/mglru_core.s
+
+# target to generate assembly for a file
+src/MGLRU/mglru_core.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/mglru_core.cpp.s
+.PHONY : src/MGLRU/mglru_core.cpp.s
+
+src/MGLRU/pid_controller.o: src/MGLRU/pid_controller.cpp.o
+.PHONY : src/MGLRU/pid_controller.o
+
+# target to build an object file
+src/MGLRU/pid_controller.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/pid_controller.cpp.o
+.PHONY : src/MGLRU/pid_controller.cpp.o
+
+src/MGLRU/pid_controller.i: src/MGLRU/pid_controller.cpp.i
+.PHONY : src/MGLRU/pid_controller.i
+
+# target to preprocess a source file
+src/MGLRU/pid_controller.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/pid_controller.cpp.i
+.PHONY : src/MGLRU/pid_controller.cpp.i
+
+src/MGLRU/pid_controller.s: src/MGLRU/pid_controller.cpp.s
+.PHONY : src/MGLRU/pid_controller.s
+
+# target to generate assembly for a file
+src/MGLRU/pid_controller.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mglru.dir/build.make CMakeFiles/mglru.dir/src/MGLRU/pid_controller.cpp.s
+.PHONY : src/MGLRU/pid_controller.cpp.s
 
 src/SRRIP/srrip_cache_instantiations.o: src/SRRIP/srrip_cache_instantiations.cpp.o
 .PHONY : src/SRRIP/srrip_cache_instantiations.o
@@ -521,6 +691,8 @@ help:
 	@echo "... bloom_filter"
 	@echo "... bloom_filter_demo"
 	@echo "... bloom_filter_test"
+	@echo "... mglru"
+	@echo "... mglru_test"
 	@echo "... s3fifo_cache_demo"
 	@echo "... s3fifo_cache_test"
 	@echo "... srrip_cache"
@@ -535,6 +707,24 @@ help:
 	@echo "... examples/srrip_cache_demo.o"
 	@echo "... examples/srrip_cache_demo.i"
 	@echo "... examples/srrip_cache_demo.s"
+	@echo "... src/MGLRU/access_tracker.o"
+	@echo "... src/MGLRU/access_tracker.i"
+	@echo "... src/MGLRU/access_tracker.s"
+	@echo "... src/MGLRU/generation.o"
+	@echo "... src/MGLRU/generation.i"
+	@echo "... src/MGLRU/generation.s"
+	@echo "... src/MGLRU/main.o"
+	@echo "... src/MGLRU/main.i"
+	@echo "... src/MGLRU/main.s"
+	@echo "... src/MGLRU/manager.o"
+	@echo "... src/MGLRU/manager.i"
+	@echo "... src/MGLRU/manager.s"
+	@echo "... src/MGLRU/mglru_core.o"
+	@echo "... src/MGLRU/mglru_core.i"
+	@echo "... src/MGLRU/mglru_core.s"
+	@echo "... src/MGLRU/pid_controller.o"
+	@echo "... src/MGLRU/pid_controller.i"
+	@echo "... src/MGLRU/pid_controller.s"
 	@echo "... src/SRRIP/srrip_cache_instantiations.o"
 	@echo "... src/SRRIP/srrip_cache_instantiations.i"
 	@echo "... src/SRRIP/srrip_cache_instantiations.s"
