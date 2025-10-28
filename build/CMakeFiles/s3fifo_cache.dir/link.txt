@@ -1,2 +1,0 @@
-/usr/bin/ar qc libs3fifo_cache.a CMakeFiles/s3fifo_cache.dir/src/s3fifo/cache_instantiations.cpp.o
-/usr/bin/ranlib libs3fifo_cache.a

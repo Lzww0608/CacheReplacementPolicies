@@ -1,4 +1,4 @@
-# Install script for directory: /home/lab2439/lzww/CRP
+# Install script for directory: /home/lab2439/Work/lzww/CRP
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -43,26 +43,26 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/lab2439/lzww/CRP/build/libbloom_filter.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/lab2439/Work/lzww/CRP/build/libbloom_filter.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/lab2439/lzww/CRP/build/libsrrip_cache.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/lab2439/Work/lzww/CRP/build/libsrrip_cache.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/lab2439/lzww/CRP/build/libmglru.a")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" TYPE STATIC_LIBRARY FILES "/home/lab2439/Work/lzww/CRP/build/libmglru.a")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE FILE FILES
-    "/home/lab2439/lzww/CRP/include/utils/bloom_filter.h"
-    "/home/lab2439/lzww/CRP/include/SRRIP/srrip_cache.h"
-    "/home/lab2439/lzww/CRP/include/SRRIP/cache_set.h"
-    "/home/lab2439/lzww/CRP/include/SRRIP/cache_line.h"
-    "/home/lab2439/lzww/CRP/include/s3fifo/cache.h"
-    "/home/lab2439/lzww/CRP/include/utils/node.h"
-    "/home/lab2439/lzww/CRP/include/utils/intrusive_list.h"
+    "/home/lab2439/Work/lzww/CRP/include/utils/bloom_filter.h"
+    "/home/lab2439/Work/lzww/CRP/include/SRRIP/srrip_cache.h"
+    "/home/lab2439/Work/lzww/CRP/include/SRRIP/cache_set.h"
+    "/home/lab2439/Work/lzww/CRP/include/SRRIP/cache_line.h"
+    "/home/lab2439/Work/lzww/CRP/include/s3fifo/cache.h"
+    "/home/lab2439/Work/lzww/CRP/include/utils/node.h"
+    "/home/lab2439/Work/lzww/CRP/include/utils/intrusive_list.h"
     )
 endif()
 
@@ -73,7 +73,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/bloom_filter_demo"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/lab2439/lzww/CRP/build/bloom_filter_demo")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/lab2439/Work/lzww/CRP/build/bloom_filter_demo")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/bloom_filter_demo" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/bloom_filter_demo")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -89,7 +89,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/srrip_cache_demo"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/lab2439/lzww/CRP/build/srrip_cache_demo")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/lab2439/Work/lzww/CRP/build/srrip_cache_demo")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/srrip_cache_demo" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/srrip_cache_demo")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -105,7 +105,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/s3fifo_cache_demo"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/lab2439/lzww/CRP/build/s3fifo_cache_demo")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/lab2439/Work/lzww/CRP/build/s3fifo_cache_demo")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/s3fifo_cache_demo" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/s3fifo_cache_demo")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -121,7 +121,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/address_mapping_test"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/lab2439/lzww/CRP/build/address_mapping_test")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/lab2439/Work/lzww/CRP/build/address_mapping_test")
   if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/address_mapping_test" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/address_mapping_test")
     if(CMAKE_INSTALL_DO_STRIP)
@@ -138,5 +138,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/lab2439/lzww/CRP/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/lab2439/Work/lzww/CRP/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

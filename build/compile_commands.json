@@ -1,0 +1,77 @@
+[
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/bloom_filter.dir/src/utils/bloom_filter.cpp.o -c /home/lab2439/Work/lzww/CRP/src/utils/bloom_filter.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/src/utils/bloom_filter.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/srrip_cache.dir/src/SRRIP/srrip_cache_instantiations.cpp.o -c /home/lab2439/Work/lzww/CRP/src/SRRIP/srrip_cache_instantiations.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/src/SRRIP/srrip_cache_instantiations.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/mglru.dir/src/MGLRU/access_tracker.cpp.o -c /home/lab2439/Work/lzww/CRP/src/MGLRU/access_tracker.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/src/MGLRU/access_tracker.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/mglru.dir/src/MGLRU/generation.cpp.o -c /home/lab2439/Work/lzww/CRP/src/MGLRU/generation.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/src/MGLRU/generation.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/mglru.dir/src/MGLRU/pid_controller.cpp.o -c /home/lab2439/Work/lzww/CRP/src/MGLRU/pid_controller.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/src/MGLRU/pid_controller.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/mglru.dir/src/MGLRU/mglru_core.cpp.o -c /home/lab2439/Work/lzww/CRP/src/MGLRU/mglru_core.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/src/MGLRU/mglru_core.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/mglru.dir/src/MGLRU/manager.cpp.o -c /home/lab2439/Work/lzww/CRP/src/MGLRU/manager.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/src/MGLRU/manager.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/bloom_filter_demo.dir/examples/bloom_filter_demo.cpp.o -c /home/lab2439/Work/lzww/CRP/examples/bloom_filter_demo.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/examples/bloom_filter_demo.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/srrip_cache_demo.dir/examples/srrip_cache_demo.cpp.o -c /home/lab2439/Work/lzww/CRP/examples/srrip_cache_demo.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/examples/srrip_cache_demo.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/s3fifo_cache_demo.dir/examples/s3fifo_cache_demo.cpp.o -c /home/lab2439/Work/lzww/CRP/examples/s3fifo_cache_demo.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/examples/s3fifo_cache_demo.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17 -o CMakeFiles/address_mapping_test.dir/test/address_mapping_test.cpp.o -c /home/lab2439/Work/lzww/CRP/test/address_mapping_test.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/test/address_mapping_test.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -DGTEST_HAS_PTHREAD=1 -std=gnu++17 -o CMakeFiles/bloom_filter_test.dir/test/bloom_filter_test.cpp.o -c /home/lab2439/Work/lzww/CRP/test/bloom_filter_test.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/test/bloom_filter_test.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -DGTEST_HAS_PTHREAD=1 -std=gnu++17 -o CMakeFiles/srrip_cache_test.dir/test/srrip_cache_test.cpp.o -c /home/lab2439/Work/lzww/CRP/test/srrip_cache_test.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/test/srrip_cache_test.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -DGTEST_HAS_PTHREAD=1 -std=gnu++17 -o CMakeFiles/s3fifo_cache_test.dir/test/s3fifo_cache_test.cpp.o -c /home/lab2439/Work/lzww/CRP/test/s3fifo_cache_test.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/test/s3fifo_cache_test.cpp"
+},
+{
+  "directory": "/home/lab2439/Work/lzww/CRP/build",
+  "command": "/usr/bin/c++ -DHAVE_SSE -I/home/lab2439/Work/lzww/CRP -Wall -Wextra -O3 -DNDEBUG -march=native -DGTEST_HAS_PTHREAD=1 -std=gnu++17 -o CMakeFiles/mglru_test.dir/src/MGLRU/main.cpp.o -c /home/lab2439/Work/lzww/CRP/src/MGLRU/main.cpp",
+  "file": "/home/lab2439/Work/lzww/CRP/src/MGLRU/main.cpp"
+}
+]

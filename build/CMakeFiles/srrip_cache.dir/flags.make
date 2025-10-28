@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DHAVE_SSE
 
-CXX_INCLUDES = -I/home/lab2439/lzww/CRP
+CXX_INCLUDES = -I/home/lab2439/Work/lzww/CRP
 
 CXX_FLAGS = -Wall -Wextra -O3 -DNDEBUG -march=native -std=gnu++17
 

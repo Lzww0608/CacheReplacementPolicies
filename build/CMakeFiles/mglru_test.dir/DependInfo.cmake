@@ -8,12 +8,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/lab2439/lzww/CRP/src/MGLRU/main.cpp" "CMakeFiles/mglru_test.dir/src/MGLRU/main.cpp.o" "gcc" "CMakeFiles/mglru_test.dir/src/MGLRU/main.cpp.o.d"
+  "/home/lab2439/Work/lzww/CRP/src/MGLRU/main.cpp" "CMakeFiles/mglru_test.dir/src/MGLRU/main.cpp.o" "gcc" "CMakeFiles/mglru_test.dir/src/MGLRU/main.cpp.o.d"
   )
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/lab2439/lzww/CRP/build/CMakeFiles/mglru.dir/DependInfo.cmake"
+  "/home/lab2439/Work/lzww/CRP/build/CMakeFiles/mglru.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.
