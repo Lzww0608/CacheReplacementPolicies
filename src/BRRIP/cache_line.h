@@ -8,7 +8,7 @@
 #ifndef CACHE_LINE_H
 #define CACHE_LINE_H
 
-namspace BRRIP {
+namespace BRRIP {
     
 enum class MESIState {
     Invalid,
@@ -27,6 +27,6 @@ struct CacheLine {
 };
 
 
-} // namesapce BRRIP
+} // namespace BRRIP
 
 #endif // CACHE_LINE_H

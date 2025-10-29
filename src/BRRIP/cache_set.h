@@ -11,8 +11,13 @@
 #include "cache_line.h"
 
 #include <cstdint>
+#include <optional>
+#include <mutex>
+#include <memory>
+#include <shared_mutex>
+#include <vector>
 
-namesapce BRRIP {
+namespace BRRIP {
 
 template <uint8_t RRPV_M_BITS>
 class CacheSet {
@@ -34,7 +39,7 @@ public:
     [[nodiscard]] std::optional<size_t> findWay(uint64_t tag) const;
 
     // 查找一个空闲的way索引
-    [[nodiscard]] std::optioanl<size_t> findEmptyWay() const;
+    [[nodiscard]] std::optional<size_t> findEmptyWay() const;
 
     // 根据BRRIP策略查找一个牺牲者way索引
     [[nodiscard]] size_t findVictimWay();
@@ -44,11 +49,28 @@ public:
 
     // 填充一个way（未命中时调用），设置tag和RRPV
     void fillWay(size_t way_index, uint64_t tag);
+
+private:
+    static constexpr uint8_t RRPV_MAX = (1 << RRPV_M_BITS) - 1;
+    std::vector<CacheLine> ways_;
+    // buckets[r] stores the index of the cache line "RRPV = r"
+    std::vector<std::vector<size_t>> buckets_;
+    // State Bit: if rth bit is 1, there is a cache line "RRPV = r"
+    uint32_t rrpv_presence;
+    // max RRPV currently
+    uint8_t max_rrpv;
+    mutable std::unique_ptr<std::shared_mutex> mtx_;
+
+    struct Stats {
+        size_t hits = 0;
+        size_t misses = 0;
+        size_t replacements = 0;
+    } stats_;
 };
 
 
 
 
-}; // BRRIP
+} // namespace BRRIP
 
 #endif // !CACHE_SET_H
