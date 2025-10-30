@@ -111,8 +111,6 @@ This project provides efficient, thread-safe, and well-tested implementations of
   - Particularly effective for memory management in operating systems and large-scale caching systems
   - Offers excellent performance for workloads with mixed temporal and spatial locality patterns
 
-## ToDo:
-
 - **BRRIP (Bimodal Re-Reference Interval Prediction)**
   - Enhanced version of SRRIP that uses bimodal insertion policy
   - Combines the benefits of LRU and SRRIP by using two different insertion policies
@@ -121,6 +119,8 @@ This project provides efficient, thread-safe, and well-tested implementations of
   - Provides robustness against both scan-resistant and thrash-resistant workloads
   - Delivers superior performance compared to pure SRRIP or LRU across diverse access patterns
   - Widely adopted in modern processor caches and high-performance storage systems
+
+## ToDo:
 
 - **DRRIP (Dynamic Re-Reference Interval Prediction)**
   - Adaptive cache replacement policy that dynamically switches between SRRIP and BRRIP
